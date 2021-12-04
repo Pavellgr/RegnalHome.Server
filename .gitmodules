@@ -1,0 +1,3 @@
+[submodule "RegnalHome.Common"]
+	path = RegnalHome.Common
+	url = git@bitbucket.org:regnal_personal/regnalhome.common.git
