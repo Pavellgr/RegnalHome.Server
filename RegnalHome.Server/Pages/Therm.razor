@@ -1,0 +1,54 @@
+﻿@page "/therm"
+@using RegnalHome.Common.RegnalHome.Therm
+@using RegnalHome.Server.Data
+@inject ThermService ThermService
+@inject NavigationManager UriHelper
+@attribute [Authorize]
+
+<h3>RegnalHome.Therm</h3>
+
+@if (sensors == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Temp. (C)</th>
+                <th>ConnectionState</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sensor in sensors)
+            {
+                <tr class="pointer-event" @onclick="()=>Navigate(sensor.Id)">
+                    <td>@sensor.Name</td>
+                    <td>
+                        @if (sensor.ConnectionState == Common.ConnectionState.Online)
+                        {
+                            @sensor.Temperature
+                        }
+                    </td>
+                    <td>@sensor.ConnectionState</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private ThermSensor[]? sensors;
+
+    protected override async Task OnInitializedAsync()
+    {
+        sensors = await ThermService.GetThermSensors();
+    }
+
+    void Navigate(Guid id)
+    {
+        UriHelper.NavigateTo($"/therm/{id}");
+    }
+}

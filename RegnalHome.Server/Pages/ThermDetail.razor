@@ -1,0 +1,87 @@
+﻿@page "/therm/{id}"
+@using RegnalHome.Common.RegnalHome.Therm
+@using RegnalHome.Server.Data
+@inject ThermService ThermService
+@attribute [Authorize]
+
+<h3>RegnalHome.Therm</h3>
+
+@if (sensor == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="col-10">
+
+        <div>
+            <div class="col-2 oi-align-right">
+                Id
+            </div>
+            <div class="col-10 oi-align-left offset-1">
+                @sensor.Id
+            </div>
+        </div>
+
+        <div>
+            <div class="col-2 oi-align-right">
+                Name
+            </div>
+            <div class="col-8 oi-align-left offset-1">
+                @sensor.Name
+            </div>
+        </div>
+
+        <div>
+            <div class="col-2 oi-align-right">
+                Temperature
+            </div>
+            <div class="col-8 oi-align-left offset-1">
+                @if (sensor.ConnectionState == Common.ConnectionState.Online)
+                {
+                    @sensor.Temperature
+                }
+            </div>
+        </div>
+
+        <div>
+            <div class="col-2 oi-align-right">
+                Status
+            </div>
+            <div class="col-8 oi-align-left offset-1">
+                @sensor.ConnectionState
+                @if (sensor.ConnectionState == Common.ConnectionState.Unknown)
+                {
+                    <em>, Reloading...</em>
+                    Reload();
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string? id { get; set; }
+
+    private ThermSensor? sensor;
+
+    protected override async Task OnInitializedAsync()
+    {
+        sensor = await ThermService.GetThermSensor(id);
+    }
+}
+
+@functions {
+    void Reload()
+    {
+        Task.Run(async () =>
+        {
+            return await ThermService.ReloadThermSensor(id);
+        }).ContinueWith(async result =>
+        {
+            sensor = await result;
+            await InvokeAsync(StateHasChanged);
+        }, TaskScheduler.FromCurrentSynchronizationContext());
+    }
+}
