@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegnalHome.Server", "RegnalHome.Server\RegnalHome.Server.csproj", "{A1FAE769-B989-415B-8B52-6970263E025D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegnalHome.Common", "..\RegnalHome.Common\RegnalHome.Common.csproj", "{2AB88748-FE31-4F63-8B8E-CC801654393F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegnalHome.Common", "RegnalHome.Common\RegnalHome.Common.csproj", "{2AB88748-FE31-4F63-8B8E-CC801654393F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
