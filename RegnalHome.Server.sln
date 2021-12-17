@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegnalHome.Server", "Regnal
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegnalHome.Common", "RegnalHome.Common\RegnalHome.Common.csproj", "{2AB88748-FE31-4F63-8B8E-CC801654393F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegnalHome.GrpcSim", "RegnalHome.GrpcSim\RegnalHome.GrpcSim.csproj", "{7003A302-1D9F-4207-8BEF-0473718C5784}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{2AB88748-FE31-4F63-8B8E-CC801654393F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AB88748-FE31-4F63-8B8E-CC801654393F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AB88748-FE31-4F63-8B8E-CC801654393F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7003A302-1D9F-4207-8BEF-0473718C5784}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7003A302-1D9F-4207-8BEF-0473718C5784}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7003A302-1D9F-4207-8BEF-0473718C5784}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7003A302-1D9F-4207-8BEF-0473718C5784}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

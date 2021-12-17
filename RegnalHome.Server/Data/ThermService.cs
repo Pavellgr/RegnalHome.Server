@@ -1,31 +1,64 @@
-﻿using RegnalHome.Common.RegnalHome.Therm;
+﻿using RegnalHome.Common.Dtos;
+using RegnalHome.Common.Enums;
+using RegnalHome.Common.Models;
+using RegnalHome.Grpc;
+using RegnalHome.Server.Pages;
 
 namespace RegnalHome.Server.Data
 {
     public class ThermService
     {
-        private ThermSensor[] sensors;
-
-        public ThermService()
+        private readonly ThermSensor[] sensors = new[]
         {
-            sensors = new[] {
-                    new ThermSensor { Name = "First", ConnectionState = Common.ConnectionState.Online, Temperature = 5 },
-                    new ThermSensor { Name = "Second", ConnectionState = Common.ConnectionState.Unknown },
-                    new ThermSensor { Name = "Third", ConnectionState = Common.ConnectionState.Offline }
-                };
-        }
+            new ThermSensor
+            {
+                Id = Guid.NewGuid(),
+                Name = "First",
+                ConnectionState = ConnectionState.Online,
+                Temperature = 5
+            },
+            new ThermSensor
+            {
+                Id = Guid.NewGuid(),
+                Name = "Second",
+                ConnectionState = ConnectionState.Unknown
+            },
+            new ThermSensor
+            {
+                Id = Guid.NewGuid(),
+                Name = "Third",
+                ConnectionState = ConnectionState.Offline
+            }
+        };
 
-        public async Task<ThermSensor[]> GetThermSensors()
+        public async Task<ThermSensorDto[]> GetThermSensors()
         {
             return await Task.FromResult(sensors);
         }
 
-        public async Task<ThermSensor?> GetThermSensor(string? id)
+        public async Task<ThermSensorDto?> GetThermSensor(string? id)
         {
             if (id != null &&
                 Guid.TryParse(id, out var guid))
             {
-                return await Task.FromResult(sensors.FirstOrDefault(p => p.Id == guid));
+                var sensorBase = await Task.FromResult(sensors.FirstOrDefault(p => p.Id == guid));
+                
+                if (sensorBase != null)
+                {
+                    var sensor = new ThermSensor
+                    {
+                        Id = guid,
+                        Name = sensorBase.Name,
+                        ConnectionState = ConnectionState.Offline
+                    };
+
+                    var sensorData = await GrpcService.GetResponse<ThermSensorReply>();
+
+                    sensor.ConnectionState = ConnectionState.Online;
+                    sensor.Temperature = sensorData.Temperature;
+                    
+                    return sensor;
+                }
             }
 
             return null;
@@ -41,7 +74,7 @@ namespace RegnalHome.Server.Data
                 var sensor = await Task.FromResult(sensors.FirstOrDefault(p => p.Id == guid));
                 if (sensor != null)
                 {
-                    sensor.ConnectionState = Common.ConnectionState.Online;
+                    sensor.ConnectionState = ConnectionState.Online;
                     sensor.Temperature = 10;
                 }
 

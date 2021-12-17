@@ -1,6 +1,7 @@
 ﻿@page "/therm/{id}"
-@using RegnalHome.Common.RegnalHome.Therm
 @using RegnalHome.Server.Data
+@using RegnalHome.Common.Dtos
+@using RegnalHome.Common.Enums
 @inject ThermService ThermService
 @attribute [Authorize]
 
@@ -37,7 +38,7 @@ else
                 Temperature
             </div>
             <div class="col-8 oi-align-left offset-1">
-                @if (sensor.ConnectionState == Common.ConnectionState.Online)
+                @if (sensor.ConnectionState == ConnectionState.Online)
                 {
                     @sensor.Temperature
                 }
@@ -50,7 +51,7 @@ else
             </div>
             <div class="col-8 oi-align-left offset-1">
                 @sensor.ConnectionState
-                @if (sensor.ConnectionState == Common.ConnectionState.Unknown)
+                @if (sensor.ConnectionState == ConnectionState.Unknown)
                 {
                     <em>, Reloading...</em>
                     Reload();
@@ -64,7 +65,7 @@ else
     [Parameter]
     public string? id { get; set; }
 
-    private ThermSensor? sensor;
+    private ThermSensorDto? sensor;
 
     protected override async Task OnInitializedAsync()
     {

@@ -1,6 +1,7 @@
 ﻿@page "/therm"
-@using RegnalHome.Common.RegnalHome.Therm
 @using RegnalHome.Server.Data
+@using RegnalHome.Common.Enums
+@using RegnalHome.Common.Dtos
 @inject ThermService ThermService
 @inject NavigationManager UriHelper
 @attribute [Authorize]
@@ -27,7 +28,7 @@ else
                 <tr class="pointer-event" @onclick="()=>Navigate(sensor.Id)">
                     <td>@sensor.Name</td>
                     <td>
-                        @if (sensor.ConnectionState == Common.ConnectionState.Online)
+                        @if (sensor.ConnectionState == ConnectionState.Online)
                         {
                             @sensor.Temperature
                         }
@@ -40,7 +41,7 @@ else
 }
 
 @code {
-    private ThermSensor[]? sensors;
+    private ThermSensorDto[]? sensors;
 
     protected override async Task OnInitializedAsync()
     {
