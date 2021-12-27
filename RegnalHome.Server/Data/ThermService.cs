@@ -1,8 +1,8 @@
-﻿using RegnalHome.Common.Dtos;
+﻿using RegnalHome.Common;
+using RegnalHome.Common.Dtos;
 using RegnalHome.Common.Enums;
 using RegnalHome.Common.Models;
 using RegnalHome.Grpc;
-using RegnalHome.Server.Pages;
 
 namespace RegnalHome.Server.Data
 {
@@ -31,18 +31,23 @@ namespace RegnalHome.Server.Data
             }
         };
 
-        public async Task<ThermSensorDto[]> GetThermSensors()
+        public async Task<ThermSensorDto[]> GetThermSensors(CancellationToken cancellationToken = default)
         {
-            return await Task.FromResult(sensors);
+            return await Task.WhenAll(sensors.Select(p =>
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                return p.GetOnlyBaseProps();
+            }));
         }
 
-        public async Task<ThermSensorDto?> GetThermSensor(string? id)
+        public async Task<ThermSensorDto?> GetThermSensor(string? id, CancellationToken cancellationToken = default)
         {
             if (id != null &&
                 Guid.TryParse(id, out var guid))
             {
-                var sensorBase = await Task.FromResult(sensors.FirstOrDefault(p => p.Id == guid));
-                
+                var sensorBase = sensors.FirstOrDefault(p => p.Id == guid);
+
                 if (sensorBase != null)
                 {
                     var sensor = new ThermSensor
@@ -52,11 +57,16 @@ namespace RegnalHome.Server.Data
                         ConnectionState = ConnectionState.Offline
                     };
 
-                    var sensorData = await GrpcService.GetResponse<ThermSensorReply>();
+                    var sensorData = await new GrpcService().CallGrpc(
+                        async (client, headers) => await client.GetThermSensorAsync(new EmptyRequest(), headers,
+                            cancellationToken: cancellationToken), cancellationToken);
+
+                    cancellationToken.ThrowIfCancellationRequested();
 
                     sensor.ConnectionState = ConnectionState.Online;
                     sensor.Temperature = sensorData.Temperature;
-                    
+                    sensor.TargetTemperature = sensorData.TargetTemperature;
+
                     return sensor;
                 }
             }
@@ -64,24 +74,18 @@ namespace RegnalHome.Server.Data
             return null;
         }
 
-        public async Task<ThermSensor?> ReloadThermSensor(string? id)
+        public async Task<bool> SaveThermSensor(ThermSensor sensor, CancellationToken cancellationToken = default)
         {
-            Thread.Sleep(2000);
+            await new GrpcService().CallGrpc(
+                async (client, headers) =>
+                    await client.SetThermSensorAsync(new ThermSensorRequest
+                    {
+                        Id = sensor.Id.ToString(),
+                        TargetTemperature = sensor.TargetTemperature ?? 0
+                    }, headers, cancellationToken: cancellationToken),
+                cancellationToken);
 
-            if (id != null &&
-                Guid.TryParse(id, out var guid))
-            {
-                var sensor = await Task.FromResult(sensors.FirstOrDefault(p => p.Id == guid));
-                if (sensor != null)
-                {
-                    sensor.ConnectionState = ConnectionState.Online;
-                    sensor.Temperature = 10;
-                }
-
-                return sensor;
-            }
-
-            return null;
+            return true;
         }
     }
 }

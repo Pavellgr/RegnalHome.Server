@@ -32,6 +32,8 @@ builder.Services.AddAuthentication(options =>
 
     options.ResponseType = "code";
     options.SaveTokens = true;
+    options.Scope.Add(Configuration.IdentityServer.Clients.RegnalHome.Server.AllowedScopes.Server);
+    options.Scope.Add(Configuration.IdentityServer.Clients.RegnalHome.Server.AllowedScopes.Therm);
 
     options.Events = new OpenIdConnectEvents
     {

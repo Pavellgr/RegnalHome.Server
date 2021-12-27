@@ -1,8 +1,8 @@
 ﻿@page "/therm/{id}"
 @using RegnalHome.Server.Data
-@using RegnalHome.Common.Dtos
 @using RegnalHome.Common.Enums
-@inject ThermService ThermService
+@using RegnalHome.Common.Models
+@inject ThermService _thermService
 @attribute [Authorize]
 
 <h3>RegnalHome.Therm</h3>
@@ -13,7 +13,13 @@
 }
 else
 {
-    <div class="col-10">
+    @if (saving)
+    {
+        <p><em>Saving...</em></p>
+    }
+    <EditForm class="col-10" Model="@sensor" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
         <div>
             <div class="col-2 oi-align-right">
@@ -29,13 +35,13 @@ else
                 Name
             </div>
             <div class="col-8 oi-align-left offset-1">
-                @sensor.Name
+                <InputText id="Name" @bind-Value="@sensor.Name" />
             </div>
         </div>
 
         <div>
             <div class="col-2 oi-align-right">
-                Temperature
+                Actual temperature
             </div>
             <div class="col-8 oi-align-left offset-1">
                 @if (sensor.ConnectionState == ConnectionState.Online)
@@ -47,42 +53,60 @@ else
 
         <div>
             <div class="col-2 oi-align-right">
-                Status
+                Target temperature
             </div>
             <div class="col-8 oi-align-left offset-1">
-                @sensor.ConnectionState
-                @if (sensor.ConnectionState == ConnectionState.Unknown)
-                {
-                    <em>, Reloading...</em>
-                    Reload();
-                }
+                <InputNumber id="TargetTemperature" @bind-Value="@sensor.TargetTemperature" />
             </div>
         </div>
-    </div>
+
+        <button type="submit">Submit</button>
+    </EditForm>
 }
 
 @code {
     [Parameter]
     public string? id { get; set; }
 
-    private ThermSensorDto? sensor;
+    private ThermSensor? sensor;
 
     protected override async Task OnInitializedAsync()
     {
-        sensor = await ThermService.GetThermSensor(id);
+        sensor = (ThermSensor?)await _thermService.GetThermSensor(id);
     }
 }
 
 @functions {
+    private bool saving;
+
     void Reload()
     {
-        Task.Run(async () =>
-        {
-            return await ThermService.ReloadThermSensor(id);
-        }).ContinueWith(async result =>
-        {
-            sensor = await result;
-            await InvokeAsync(StateHasChanged);
-        }, TaskScheduler.FromCurrentSynchronizationContext());
+        throw new NotImplementedException();
     }
+
+    private void HandleValidSubmit()
+    {
+        var task = InvokeAsync(() =>
+        {
+            saving = true;
+            StateHasChanged();
+        });
+
+        var continueTask = task.ContinueWith(async _ =>
+        {
+            await _thermService.SaveThermSensor(sensor);
+        });
+
+        continueTask.ContinueWith(async _ =>
+        {
+            await InvokeAsync(() =>
+            {
+                saving = false;
+                StateHasChanged();
+            });
+        });
+
+        Task.Factory.StartNew(async () => await task);
+    }
+
 }

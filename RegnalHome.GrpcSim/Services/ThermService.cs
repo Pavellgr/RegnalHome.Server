@@ -1,12 +1,21 @@
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using RegnalHome.Common.Models;
 using RegnalHome.Grpc;
 
 namespace RegnalHome.GrpcSim.Services
 {
+    [Authorize]
     public class ThermService : Therm.ThermBase
     {
         private readonly ILogger<ThermService> _logger;
+
+        ThermSensor Sensor = new ThermSensor
+        {
+            Id = Guid.NewGuid(),
+            Temperature = 5
+        };
+
         public ThermService(ILogger<ThermService> logger)
         {
             _logger = logger;
@@ -14,16 +23,21 @@ namespace RegnalHome.GrpcSim.Services
 
         public override Task<ThermSensorReply> GetThermSensor(EmptyRequest request, ServerCallContext context)
         {
-            var sensor = new ThermSensor
+            return Task.FromResult( new ThermSensorReply
             {
-                Id = Guid.NewGuid(),
-                Temperature = 5
-            };
+                Id = Sensor.Id.ToString(),
+                Temperature = Sensor.Temperature ?? 0,
+                TargetTemperature = Sensor.TargetTemperature ?? 0
+            });
+        }
 
-            return Task.FromResult(new ThermSensorReply
+        public override Task<BooleanReply> SetThermSensor(ThermSensorRequest request, ServerCallContext context)
+        {
+            Sensor.TargetTemperature = request.TargetTemperature;
+
+            return Task.FromResult(new BooleanReply
             {
-                Id = sensor.Id.ToString(),
-                Temperature = sensor.Temperature ?? 0
+                Value = true
             });
         }
     }
