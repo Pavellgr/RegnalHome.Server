@@ -53,3 +53,5 @@ RegnalHome.Server/obj/
 RegnalHome.Server/bin/
 RegnalHome.GrpcSim/obj/
 RegnalHome.GrpcSim/bin/
+bin/
+obj/

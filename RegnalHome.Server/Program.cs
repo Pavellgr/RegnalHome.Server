@@ -110,4 +110,6 @@ app.MapGrpcService<GrpcServerService>();
 
 app.Services.GetRequiredService<Executor>();
 
+app.Urls.Add(RegnalHome.Common.Configuration.Server.HostingUrl);
+
 app.Run();

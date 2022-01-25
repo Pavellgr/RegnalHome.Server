@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  regnalhome.server:
+    image: ${DOCKER_REGISTRY-}regnalhomeserver
+    build:
+      context: .
+      dockerfile: RegnalHome.Server/Dockerfile
