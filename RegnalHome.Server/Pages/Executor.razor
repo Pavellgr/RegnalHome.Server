@@ -1,0 +1,85 @@
+﻿@page "/executor"
+@using RegnalHome.Common.Enums
+@using RegnalHome.Server.Data@using RegnalHome.Server.Executor
+@using System.Text
+@using RegnalHome.Server.Executor.Tasks
+@inject ExecutorService _executorService
+@inject RegnalHome.Server.Executor.Executor _executor
+@inject IJSRuntime _js
+@attribute [Authorize]
+
+<h3>Executor</h3>
+<div>
+    <div class="col-6" style="float: left;">
+        <div class="col-12" style="float: left; margin-bottom: 20px;">
+            <div class="col-5">Status:</div>
+            <div class="col-7">@Model.State</div>
+        </div>
+        <div class="col-12" style="float: left;">
+            <div class="offset-5 col-7">
+                <button @onclick="@(() =>_executorService.Stop())">Stop</button>
+                <button @onclick="@(() =>_executorService.Start())">Start</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-6" style="float: left;">
+        <textarea class="col-12"
+                  style="height: 500px;"
+                  @ref="_logRef">@Log</textarea>
+    </div>
+</div>
+@code {
+    public (ExecutingState State, IReadOnlyCollection<IExecutorTask> tasks) Model;
+    public string Log = "";
+
+    private int reloadMilliseconds = 1000;
+
+    ElementReference _logRef;
+
+    protected override void OnInitialized()
+    {
+        var timer = new Timer(Reload, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(reloadMilliseconds));
+
+        _executor.LogQueue.OnCollectionChanged += WriteLog;
+        WriteLog(this, EventArgs.Empty);
+    }
+
+    private void WriteLog(object? sender, EventArgs e)
+    {
+        Task.Factory.StartNew(async () =>
+        {
+            var log = new StringBuilder();
+            foreach (var logItem in _executor.LogQueue)
+            {
+                log.AppendLine(logItem);
+            }
+
+            await InvokeAsync(() =>
+            {
+                Log = log.ToString();
+                StateHasChanged();
+                ScrollLogToEnd();
+            });
+        });
+    }
+
+    private void Reload(object? obj)
+    {
+        Task.Factory.StartNew(async () =>
+        {
+            var model = _executorService.GetModel();
+
+            await InvokeAsync(() =>
+            {
+                Model = model;
+                StateHasChanged();
+            });
+        });
+    }
+
+    void ScrollLogToEnd()
+    {
+        _js.InvokeVoidAsync("scrollToEnd", _logRef);
+    }
+
+}

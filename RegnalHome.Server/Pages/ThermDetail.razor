@@ -1,7 +1,7 @@
 ﻿@page "/therm/{id}"
 @using RegnalHome.Server.Data
 @using RegnalHome.Common.Enums
-@using RegnalHome.Common.Models
+@using Therm = RegnalHome.Common.Models.Therm
 @inject ThermService _thermService
 @attribute [Authorize]
 
@@ -35,7 +35,7 @@ else
                 Name
             </div>
             <div class="col-8 oi-align-left offset-1">
-                <InputText id="Name" @bind-Value="@sensor.Name" />
+                @sensor.Name
             </div>
         </div>
 
@@ -46,7 +46,7 @@ else
             <div class="col-8 oi-align-left offset-1">
                 @if (sensor.ConnectionState == ConnectionState.Online)
                 {
-                    @sensor.Temperature
+                    @sensor.ActualTemperature
                 }
             </div>
         </div>
@@ -68,21 +68,16 @@ else
     [Parameter]
     public string? id { get; set; }
 
-    private ThermSensor? sensor;
+    private Therm? sensor;
 
     protected override async Task OnInitializedAsync()
     {
-        sensor = (ThermSensor?)await _thermService.GetThermSensor(id);
+        sensor = (Therm?)await _thermService.GetThermSensor(id);
     }
 }
 
 @functions {
     private bool saving;
-
-    void Reload()
-    {
-        throw new NotImplementedException();
-    }
 
     private void HandleValidSubmit()
     {

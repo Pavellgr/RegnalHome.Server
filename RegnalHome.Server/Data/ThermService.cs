@@ -1,89 +1,96 @@
-﻿using RegnalHome.Common;
+﻿using Microsoft.EntityFrameworkCore;
+using RegnalHome.Common;
 using RegnalHome.Common.Dtos;
 using RegnalHome.Common.Enums;
-using RegnalHome.Common.Models;
 using RegnalHome.Grpc;
+using RegnalHome.Server.Grpc.ClientFactories;
 
 namespace RegnalHome.Server.Data
 {
     public class ThermService
     {
-        private readonly ThermSensor[] sensors = new[]
-        {
-            new ThermSensor
-            {
-                Id = Guid.NewGuid(),
-                Name = "First",
-                ConnectionState = ConnectionState.Online,
-                Temperature = 5
-            },
-            new ThermSensor
-            {
-                Id = Guid.NewGuid(),
-                Name = "Second",
-                ConnectionState = ConnectionState.Unknown
-            },
-            new ThermSensor
-            {
-                Id = Guid.NewGuid(),
-                Name = "Third",
-                ConnectionState = ConnectionState.Offline
-            }
-        };
+        private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
+        private readonly Mapper _mapper;
+        private readonly DataStore _dataStore;
+        private readonly ThermClientFactory _thermClientFactory;
 
-        public async Task<ThermSensorDto[]> GetThermSensors(CancellationToken cancellationToken = default)
+        public ThermService(IDbContextFactory<ApplicationDbContext> dbContextFactory,
+            Mapper mapper,
+            DataStore dataStore,
+            ThermClientFactory thermClientFactory)
         {
-            return await Task.WhenAll(sensors.Select(p =>
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                return p.GetOnlyBaseProps();
-            }));
+            _dbContextFactory = dbContextFactory;
+            _mapper = mapper;
+            _dataStore = dataStore;
+            _thermClientFactory = thermClientFactory;
         }
 
-        public async Task<ThermSensorDto?> GetThermSensor(string? id, CancellationToken cancellationToken = default)
+        public async Task<ThermDto[]> GetThermCus(CancellationToken cancellationToken = default)
+        {
+            await using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+
+            var cus = await dbContext.GetThermCus(cancellationToken);
+            return _mapper.Map<ThermDto>(cus).ToArray();
+        }
+
+        public async Task<ThermDto[]> GetThermSensors(CancellationToken cancellationToken = default)
+        {
+            await using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+
+            var sensors = await dbContext.GetThermSensors(cancellationToken);
+            return _mapper.Map<ThermDto>(sensors).ToArray();
+        }
+
+        public async Task<ThermDto?> GetThermSensor(string? id, CancellationToken cancellationToken = default)
         {
             if (id != null &&
                 Guid.TryParse(id, out var guid))
             {
-                var sensorBase = sensors.FirstOrDefault(p => p.Id == guid);
+                cancellationToken.ThrowIfCancellationRequested();
+
+                await using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+
+                var sensorBase = await dbContext.GetThermSensor(guid, cancellationToken);
 
                 if (sensorBase != null)
                 {
-                    var sensor = new ThermSensor
+                    var dataStoreEntry = _dataStore.TryGetValue(Common.RegnalIdentity.Configuration.IdentityServer.Clients.RegnalHome.Therm.ClientName);
+
+                    if (dataStoreEntry is List<ThermDto> sensors)
                     {
-                        Id = guid,
-                        Name = sensorBase.Name,
-                        ConnectionState = ConnectionState.Offline
-                    };
-
-                    var sensorData = await new GrpcService().CallGrpc(
-                        async (client, headers) => await client.GetThermSensorAsync(new EmptyRequest(), headers,
-                            cancellationToken: cancellationToken), cancellationToken);
-
-                    cancellationToken.ThrowIfCancellationRequested();
-
-                    sensor.ConnectionState = ConnectionState.Online;
-                    sensor.Temperature = sensorData.Temperature;
-                    sensor.TargetTemperature = sensorData.TargetTemperature;
-
-                    return sensor;
+                        return sensors.FirstOrDefault(p => p.Id == guid);
+                    }
                 }
             }
 
             return null;
         }
 
-        public async Task<bool> SaveThermSensor(ThermSensor sensor, CancellationToken cancellationToken = default)
+        public async Task<bool> SaveThermSensor(Common.Models.Therm sensor, CancellationToken cancellationToken = default)
         {
-            await new GrpcService().CallGrpc(
-                async (client, headers) =>
-                    await client.SetThermSensorAsync(new ThermSensorRequest
-                    {
-                        Id = sensor.Id.ToString(),
-                        TargetTemperature = sensor.TargetTemperature ?? 0
-                    }, headers, cancellationToken: cancellationToken),
-                cancellationToken);
+
+            await using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+            var dbSensor = await dbContext.GetThermSensor(sensor.Id, cancellationToken);
+
+            if (dbSensor == null)
+            {
+                return false;
+            }
+
+            var client = await _thermClientFactory.CreateClient(dbSensor.Address);
+
+            var sensorData = await client.GetThermSensorAsync(new EmptyRequest(), cancellationToken: cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (Guid.TryParse(sensorData.Id, out var sensorDataGuidId) &&
+                sensorDataGuidId == sensor.Id &&
+                sensor.TargetTemperature != null)
+            {
+                var boolReply = await client.SetThermSensorAsync(new TargetTemperatureRequest { TargetTemperature = sensor.TargetTemperature.Value });
+
+                return boolReply.Value;
+            }
 
             return true;
         }

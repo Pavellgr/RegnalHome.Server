@@ -1,41 +1,47 @@
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
-using RegnalHome.Common.Models;
+using Microsoft.EntityFrameworkCore;
 using RegnalHome.Grpc;
 
 namespace RegnalHome.GrpcSim.Services
 {
     [Authorize]
-    public class ThermService : Therm.ThermBase
+    public class ThermService : Grpc.Therm.ThermBase
     {
         private readonly ILogger<ThermService> _logger;
+        private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
 
-        ThermSensor Sensor = new ThermSensor
-        {
-            Id = Guid.NewGuid(),
-            Temperature = 5
-        };
-
-        public ThermService(ILogger<ThermService> logger)
+        public ThermService(ILogger<ThermService> logger,
+            IDbContextFactory<ApplicationDbContext> dbContextFactory)
         {
             _logger = logger;
+            _dbContextFactory = dbContextFactory;
         }
 
-        public override Task<ThermSensorReply> GetThermSensor(EmptyRequest request, ServerCallContext context)
+        public override async Task<ThermSensorReply> GetThermSensor(EmptyRequest request, ServerCallContext context)
         {
-            return Task.FromResult( new ThermSensorReply
+            await using var dbContext = await _dbContextFactory.CreateDbContextAsync(context.CancellationToken);
+            var sensor = await dbContext.Sensors.FirstAsync();
+
+            return await Task.FromResult(new ThermSensorReply
             {
-                Id = Sensor.Id.ToString(),
-                Temperature = Sensor.Temperature ?? 0,
-                TargetTemperature = Sensor.TargetTemperature ?? 0
+                Id = sensor.Id.ToString(),
+                Name = sensor.Name,
+                Temperature = Random.Shared.Next(1, 100),
+                TargetTemperature = sensor.TargetTemperature ?? 0
             });
         }
 
-        public override Task<BooleanReply> SetThermSensor(ThermSensorRequest request, ServerCallContext context)
+        public override async Task<BooleanReply> SetThermSensor(TargetTemperatureRequest request, ServerCallContext context)
         {
-            Sensor.TargetTemperature = request.TargetTemperature;
+            await using var dbContext = await _dbContextFactory.CreateDbContextAsync(context.CancellationToken);
+            var sensor = await dbContext.Sensors.FirstAsync();
 
-            return Task.FromResult(new BooleanReply
+            sensor.TargetTemperature = request.TargetTemperature;
+
+            await dbContext.SaveChangesAsync(context.CancellationToken);
+
+            return await Task.FromResult(new BooleanReply
             {
                 Value = true
             });

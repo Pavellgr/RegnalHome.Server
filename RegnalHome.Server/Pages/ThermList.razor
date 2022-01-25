@@ -1,0 +1,133 @@
+﻿@page "/therm"
+@using RegnalHome.Server.Data
+@using RegnalHome.Common.Models
+@using RegnalHome.Common.Enums
+@using RegnalHome.Common
+@inject ThermService _thermService
+@inject NavigationManager _navigationManager
+@inject Mapper _mapper
+@attribute [Authorize]
+
+<h3>RegnalHome.Therm</h3>
+
+@if (sensors == null ||
+    cus == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @if (loading)
+    {
+        <p><em>Reloading...</em></p>
+    }
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Temp. (C)</th>
+                <th>ConnectionState</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sensor in sensors)
+            {
+                <tr class="card-link" @onclick="()=>Navigate(sensor.Id)">
+                    <td>@sensor.Name</td>
+                    <td>
+                        @if (sensor.ConnectionState == ConnectionState.Online)
+                        {
+                            @sensor.ActualTemperature
+                        }
+                    </td>
+                    <td>@sensor.ConnectionState</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Therm[]? cus;
+    private Therm[]? sensors;
+
+    private bool loading;
+    private CancellationTokenSource? reloadSensorsCts;
+    private int reloadMilliseconds = 5000;
+
+    protected override async Task OnInitializedAsync()
+    {
+        cus = _mapper.Map<Therm>(await _thermService.GetThermCus()).ToArray();
+        sensors = _mapper.Map<Therm>(await _thermService.GetThermSensors()).ToArray();
+
+        var timer = new Timer(ReloadSensors, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(reloadMilliseconds));
+    }
+
+    private void ReloadSensors(object? state = null)
+    {
+        reloadSensorsCts?.Cancel(true);
+        reloadSensorsCts = new CancellationTokenSource(reloadMilliseconds);
+
+        Task.Factory.StartNew(async () =>
+        {
+            await InvokeAsync(() =>
+            {
+                reloadSensorsCts.Token.ThrowIfCancellationRequested();
+
+                loading = true;
+                StateHasChanged();
+            });
+
+             reloadSensorsCts.Token.ThrowIfCancellationRequested();
+
+             var getSensors = await _thermService.GetThermSensors(reloadSensorsCts.Token);
+
+             reloadSensorsCts.Token.ThrowIfCancellationRequested();
+
+             var sensorsArray = _mapper.Map<Therm>(getSensors).ToArray();
+
+             reloadSensorsCts.Token.ThrowIfCancellationRequested();
+
+             await InvokeAsync(() =>
+             {
+                 sensors = sensorsArray;
+                 StateHasChanged();
+             });
+
+            await ReloadSensorsInner(reloadSensorsCts.Token);
+
+            await InvokeAsync(() =>
+            {
+                loading = false;
+                StateHasChanged();
+            });
+        });
+    }
+
+    private async Task ReloadSensorsInner(CancellationToken cancellationToken)
+    {
+        await Task.WhenAll(
+            sensors?.Select((Func<Therm, Task>)(async p =>
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var sensor = await _thermService.GetThermSensor(p.Id.ToString(), cancellationToken);
+
+                cancellationToken.ThrowIfCancellationRequested();
+
+                if (sensor != null)
+                {
+                    _mapper.Map(sensor, p);
+                    //p.UpdateAsync((Therm) sensor, cancellationToken);
+                }
+
+                await InvokeAsync(StateHasChanged);
+            })) ?? Array.Empty<Task>());
+    }
+
+    void Navigate(Guid id)
+    {
+        _navigationManager.NavigateTo($"/therm/{id}");
+    }
+}
