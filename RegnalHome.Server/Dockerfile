@@ -17,9 +17,11 @@ RUN dotnet build "RegnalHome.Server.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "RegnalHome.Server.csproj" -c Release -o /app/publish
 
-RUN update-ca-certificates
-
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "RegnalHome.Server.dll"]
+
+FROM base
+COPY cert.cer /usr/local/share/ca-certificates/cert.cer
+RUN update-ca-certificates
