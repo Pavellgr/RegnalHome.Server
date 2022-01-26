@@ -24,4 +24,4 @@ ENTRYPOINT ["dotnet", "RegnalHome.Server.dll"]
 
 FROM build
 COPY cert.cer /usr/local/share/ca-certificates/cert.cer
-RUN update-ca-certificates 
+RUN update-ca-certificates
