@@ -10,5 +10,6 @@ services:
       - 443:443
     volumes:
       - ${USERPROFILE}\.aspnet\https:/https/:ro
+      - ${USERPROFILE}\.aspnet\https:/usr/local/share/ca-certificates/:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
     restart: always
