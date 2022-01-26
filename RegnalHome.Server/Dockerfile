@@ -22,6 +22,6 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "RegnalHome.Server.dll"]
 
-FROM base
-COPY /src/cert.cer /usr/local/share/ca-certificates/cert.cer
+FROM build
+COPY cert.cer /usr/local/share/ca-certificates/cert.cer
 RUN update-ca-certificates
