@@ -3,13 +3,12 @@ version: '3.4'
 services:
   regnalhome.server:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=https://+:443;
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/cert.pfx
+      #- ASPNETCORE_Kestrel__Certificates__Default__Path=/https/cert.pfx
     ports:
       - 443:443
     volumes:
-      - ${USERPROFILE}\.aspnet\https:/https/:ro
-      - ${USERPROFILE}\.aspnet\https:/usr/local/share/ca-certificates/:ro
+      - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https/:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
     restart: always
