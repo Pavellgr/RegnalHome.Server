@@ -42,10 +42,4 @@
 		<ProjectReference Include="..\RegnalHome.Common\RegnalHome.Common.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <None Update="cert.pfx">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	</ItemGroup>
-
 </Project>

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -87,7 +88,15 @@ else
     app.UseHsts();
 }
 
-app.AddCertificate("../src/RegnalHome.Server/cert.pfx");
+var certPath = "/https/cert.pfx";
+if (File.Exists(certPath))
+{
+    app.AddCertificate(certPath);
+}
+else
+{
+    Console.WriteLine(certPath + "doesn't exists.");
+}
 
 app.UseHttpsRedirection();
 
