@@ -87,7 +87,7 @@ else
     app.UseHsts();
 }
 
-app.AddCertificate("cert.pfx");
+app.AddCertificate("../src/RegnalHome.Server/cert.pfx");
 
 app.UseHttpsRedirection();
 
