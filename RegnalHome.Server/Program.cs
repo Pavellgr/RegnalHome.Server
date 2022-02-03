@@ -1,22 +1,15 @@
-using Grpc.Core;
-using Grpc.Net.Client;
-using Grpc.Net.ClientFactory;
-using IdentityServer4.Models;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using RegnalHome.Common;
-using RegnalHome.Grpc;
 using RegnalHome.Server.Areas.Identity;
 using RegnalHome.Server.Data;
 using RegnalHome.Server.Executor;
 using RegnalHome.Server.Grpc;
-using System.Reflection;
-using RegnalHome.Server;
 using RegnalHome.Server.Grpc.ClientFactories;
+using System.Reflection;
 using Configuration = RegnalHome.Common.RegnalIdentity.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -93,6 +86,8 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.AddCertificate("cert.pfx");
 
 app.UseHttpsRedirection();
 
