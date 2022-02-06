@@ -10,5 +10,6 @@ services:
       - 443:443
     volumes:
       - ${USERPROFILE}\.aspnet\https:/https/:ro
+      - ${USERPROFILE}\.aspnet\https\cert.pfx:/.dotnet/corefx/cryptography/x509stores/cert.pfx:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
     restart: always
