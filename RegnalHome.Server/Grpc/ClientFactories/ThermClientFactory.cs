@@ -13,7 +13,7 @@ namespace RegnalHome.Server.Grpc.ClientFactories
         protected override string ClientId => Configuration.IdentityServer.Clients.RegnalHome.Therm.ClientId;
         protected override string ClientSecret => Configuration.IdentityServer.Clients.RegnalHome.Therm.ClientSecret;
 
-        protected override string IdentityServerAddress => $"https://{Common.Configuration.Server.IPAddress}:{Configuration.IdentityServer.Port}";
+        protected override string IdentityServerAddress => $"https://{Common.Configuration.Server.Address}:{Configuration.IdentityServer.Port}";
 
         public ThermClientFactory(IDbContextFactory<ApplicationDbContext> dbContextFactory)
         {

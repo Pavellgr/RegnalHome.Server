@@ -37,7 +37,7 @@ builder.Services.AddAuthentication(options =>
     .AddOpenIdConnect("oidc", options =>
     {
         options.Authority =
-            $"https://{RegnalHome.Common.Configuration.Server.IPAddress}:{Configuration.IdentityServer.Port}";
+            $"https://{RegnalHome.Common.Configuration.Server.Address}:{Configuration.IdentityServer.Port}";
         options.ClientId = Configuration.IdentityServer.Clients.RegnalHome.Server.ClientId;
         options.ClientSecret = Configuration.IdentityServer.Clients.RegnalHome.Server.ClientSecret;
 
@@ -59,7 +59,7 @@ builder.Services.AddAuthentication(options =>
     })
     .AddJwtBearer("Bearer", options =>
     {
-        options.Authority = $"https://{RegnalHome.Common.Configuration.Server.IPAddress}:{Configuration.IdentityServer.Port}";
+        options.Authority = $"https://{RegnalHome.Common.Configuration.Server.Address}:{Configuration.IdentityServer.Port}";
 
         options.TokenValidationParameters = new TokenValidationParameters
         {

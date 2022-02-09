@@ -14,7 +14,7 @@ builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
     {
-        options.Authority = $"https://{RegnalHome.Common.Configuration.Server.IPAddress}:{Configuration.IdentityServer.Port}";
+        options.Authority = $"https://{RegnalHome.Common.Configuration.Server.Address}:{Configuration.IdentityServer.Port}";
 
         options.TokenValidationParameters = new TokenValidationParameters
         {
