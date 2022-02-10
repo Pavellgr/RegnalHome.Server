@@ -8,7 +8,6 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/regnal.aspfree.cz.pfx
     ports:
       - 443:443
-      - 80:80
     volumes:
       - ${USERPROFILE}\.aspnet\https:/https/:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
