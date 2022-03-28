@@ -1,12 +1,12 @@
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using RegnalHome.Grpc;
+using RegnalHome.Therm.Grpc;
 
 namespace RegnalHome.GrpcSim.Services
 {
     [Authorize]
-    public class ThermService : Grpc.Therm.ThermBase
+    public class ThermService : RegnalHome.Therm.Grpc.Therm.ThermBase
     {
         private readonly ILogger<ThermService> _logger;
         private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;

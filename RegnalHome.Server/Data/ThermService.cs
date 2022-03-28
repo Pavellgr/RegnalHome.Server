@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RegnalHome.Common;
 using RegnalHome.Common.Dtos;
-using RegnalHome.Common.Enums;
-using RegnalHome.Grpc;
-using RegnalHome.Server.Grpc.ClientFactories;
+using RegnalHome.Server.ClientFactories;
+using RegnalHome.Therm.Grpc;
 
 namespace RegnalHome.Server.Data
 {

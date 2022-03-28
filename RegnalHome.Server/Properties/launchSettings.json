@@ -2,11 +2,15 @@
   "profiles": {
     "RegnalHome.Server": {
       "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:5006;https://localhost:7006",
       "dotnetRunMessages": true
     },
     "Docker": {
       "commandName": "Docker",
-      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
       "publishAllPorts": true,
       "useSSL": true
     }

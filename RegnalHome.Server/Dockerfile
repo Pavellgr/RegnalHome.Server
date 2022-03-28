@@ -8,7 +8,6 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["RegnalHome.Server/RegnalHome.Server.csproj", "RegnalHome.Server/"]
-COPY ["RegnalHome.Common/RegnalHome.Common.csproj", "RegnalHome.Common/"]
 RUN dotnet restore "RegnalHome.Server/RegnalHome.Server.csproj"
 COPY . .
 WORKDIR "/src/RegnalHome.Server"

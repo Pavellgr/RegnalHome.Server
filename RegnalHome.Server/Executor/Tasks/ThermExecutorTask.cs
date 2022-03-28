@@ -1,10 +1,9 @@
 ﻿using RegnalHome.Common.Dtos;
 using RegnalHome.Common.Enums;
-using RegnalHome.Grpc;
+using RegnalHome.Server.ClientFactories;
 using RegnalHome.Server.Data;
 using System.Collections.Concurrent;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using RegnalHome.Server.Grpc.ClientFactories;
+using RegnalHome.Therm.Grpc;
 
 namespace RegnalHome.Server.Executor.Tasks
 {

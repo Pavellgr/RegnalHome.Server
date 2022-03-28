@@ -1,12 +1,11 @@
 ﻿using Grpc.Net.Client;
 using Microsoft.EntityFrameworkCore;
 using RegnalHome.Common.RegnalIdentity;
-using RegnalHome.Grpc;
 using RegnalHome.Server.Data;
 
-namespace RegnalHome.Server.Grpc.ClientFactories
+namespace RegnalHome.Server.ClientFactories
 {
-    public class ThermClientFactory : GrpcClientFactory<Therm.ThermClient>
+    public class ThermClientFactory : GrpcClientFactory<Therm.Grpc.Therm.ThermClient>
     {
         private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
 
@@ -20,17 +19,17 @@ namespace RegnalHome.Server.Grpc.ClientFactories
             _dbContextFactory = dbContextFactory;
         }
 
-        public override async Task<Therm.ThermClient> CreateClient(string address)
+        public override async Task<Therm.Grpc.Therm.ThermClient> CreateClient(string address)
         {
             var channel = GrpcChannel.ForAddress(address, GetGrpcChannelOptions());
-            return await Task.FromResult(new Therm.ThermClient(channel));
+            return await Task.FromResult(new Therm.Grpc.Therm.ThermClient(channel));
         }
 
-        public override async Task<IEnumerable<(string Address, Therm.ThermClient Client)>> CreateClients()
+        public override async Task<IEnumerable<(string Address, Therm.Grpc.Therm.ThermClient Client)>> CreateClients()
         {
             await using var dbContext = await _dbContextFactory.CreateDbContextAsync();
             var sensors = await dbContext.GetThermSensors();
-            var result = new List<(string Address, Therm.ThermClient Client)>();
+            var result = new List<(string Address, Therm.Grpc.Therm.ThermClient Client)>();
 
             foreach (var sensor in sensors)
             {
