@@ -14,35 +14,35 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddGrpc();
 
 builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
-    options.UseSqlServer(Configuration.RegnalHomeServerConnectionString));
+  options.UseSqlServer(Configuration.RegnalHomeServerConnectionString));
 
 builder.Services.AddAuthentication(options => { options.DefaultChallengeScheme = "oidc"; })
-    .AddJwtBearer("Bearer", options =>
-    {
-        options.Authority =
-            $"https://{Configuration.Server.Address}:{RegnalHome.Common.RegnalIdentity.Configuration.IdentityServer.Port}";
+  .AddJwtBearer("Bearer", options =>
+  {
+    options.Authority =
+      $"https://{Configuration.Server.Address}:{RegnalHome.Common.RegnalIdentity.Configuration.IdentityServer.Port}";
 
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateAudience = false
-        };
-    });
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+      ValidateAudience = false
+    };
+  });
 
 builder.Services.AddSingleton<Executor>();
 
 var app = builder.Build();
 
-var certPath = "/https/cert.pfx";
+var certPath = "cert.pfx";
 if (File.Exists(certPath))
-    app.AddCertificate(certPath);
+  app.AddCertificate(certPath);
 else
-    Console.WriteLine(certPath + "doesn't exists.");
+  Console.WriteLine(certPath + " doesn't exists.");
 
 // Configure the HTTP request pipeline.
 app.MapGrpcService<ServerService>();
 app.MapGet("/",
-    () =>
-        "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+  () =>
+    "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 
 app.Services.GetRequiredService<Executor>();
 
