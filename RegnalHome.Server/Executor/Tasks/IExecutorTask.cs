@@ -2,7 +2,7 @@
 
 public interface IExecutorTask
 {
-    string Name { get; set; }
+  string Name { get; set; }
 
-    Task Execute(CancellationToken cancellationToken);
+  Task Execute(CancellationToken cancellationToken);
 }

@@ -23,7 +23,7 @@ public class Executor
   {
     var tasks = Assembly.GetExecutingAssembly().DefinedTypes
       .Where(p => p.GetInterface(nameof(IExecutorTask)) != null)
-      .Select(p => ActivatorUtilities.CreateInstance(serviceProvider, p.AsType()))
+      .Select(p => ActivatorUtilities.CreateInstance(serviceProvider, p.AsType(), serviceProvider))
       .OfType<IExecutorTask>();
 
     foreach (var task in tasks) TasksBag.Add(task);
