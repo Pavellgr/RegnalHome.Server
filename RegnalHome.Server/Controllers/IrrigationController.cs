@@ -15,7 +15,7 @@ public class IrrigationController : ControllerBase
     _dbContextFactory = dbContextFactory;
   }
 
-  [HttpGet]
+  [HttpGet("all")]
   public async Task<IEnumerable<IrrigationModule>> GetAll(CancellationToken cancellationToken)
   {
     using (var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken))
@@ -24,7 +24,7 @@ public class IrrigationController : ControllerBase
     }
   }
 
-  [HttpGet("[id]")]
+  [HttpGet]
   public async Task<IrrigationModule?> Get(Guid id, CancellationToken cancellationToken)
   {
     using (var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken))
