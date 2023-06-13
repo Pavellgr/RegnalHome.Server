@@ -4,8 +4,8 @@ using RegnalHome.Common.Models;
 
 namespace RegnalHome.Server.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("[controller]")]
 public class IrrigationController : ControllerBase
 {
   private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
@@ -16,14 +16,20 @@ public class IrrigationController : ControllerBase
   }
 
   [HttpGet]
-  public JsonResult GetAll()
+  public async Task<IEnumerable<IrrigationModule>> GetAll(CancellationToken cancellationToken)
   {
-    var modules = new List<IrrigationModule>
+    using (var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken))
     {
-      new(),
-      new()
-    };
+      return dbContext.IrrigationModules.ToList();
+    }
+  }
 
-    return new JsonResult(modules);
+  [HttpGet("[id]")]
+  public async Task<IrrigationModule?> Get(Guid id, CancellationToken cancellationToken)
+  {
+    using (var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken))
+    {
+      return await dbContext.IrrigationModules.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+    }
   }
 }
