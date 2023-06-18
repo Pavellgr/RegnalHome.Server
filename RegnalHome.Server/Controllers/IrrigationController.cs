@@ -4,8 +4,8 @@ using RegnalHome.Common.Models;
 
 namespace RegnalHome.Server.Controllers;
 
-[ApiController]
 [Route("[controller]")]
+[ApiController]
 public class IrrigationController : ControllerBase
 {
   private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
@@ -13,15 +13,6 @@ public class IrrigationController : ControllerBase
   public IrrigationController(IDbContextFactory<ApplicationDbContext> dbContextFactory)
   {
     _dbContextFactory = dbContextFactory;
-  }
-
-  [HttpGet("all")]
-  public async Task<IEnumerable<IrrigationModule>> GetAll(CancellationToken cancellationToken)
-  {
-    using (var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken))
-    {
-      return dbContext.IrrigationModules.ToList();
-    }
   }
 
   [HttpGet]

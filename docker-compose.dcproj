@@ -3,12 +3,13 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>512ee67c-dfcf-4616-bea3-8f15dd7ccebd</ProjectGuid>
+    <ProjectGuid>63306ddc-00ae-4d10-a5c6-dca18ac9c52d</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
     <DockerServiceName>regnalhome.server</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="docker-compose-up.bat" />
     <None Include="docker-compose.override.yml">
       <DependentUpon>docker-compose.yml</DependentUpon>
     </None>

@@ -2,6 +2,7 @@
   "profiles": {
     "RegnalHome.Server": {
       "commandName": "Project",
+      "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
@@ -9,8 +10,10 @@
     },
     "Docker": {
       "commandName": "Docker",
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
-      "publishAllPorts": true
+      "launchBrowser": false,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/",
+      "publishAllPorts": true,
+      "commandLineArgs": "-p 8080:8080"
     }
   }
 }
