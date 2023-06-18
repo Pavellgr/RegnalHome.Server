@@ -22,12 +22,6 @@ var app = builder.Build();
 
 app.MapControllers();
 
-var certPath = "cert.pfx";
-if (File.Exists(certPath))
-    app.AddCertificate(certPath);
-else
-    Console.WriteLine(certPath + " doesn't exists.");
-
 app.Urls.Add(Configuration.Server.HostingUrl);
 
 app.UseDeveloperExceptionPage();
