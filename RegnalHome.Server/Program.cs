@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(Configuration.RegnalHomeServerConnectionString);
+    options.UseSqlServer(Configuration.Server.Sql.ConnectionStrings.RegnalHome.Server);
     options.LogTo(Console.WriteLine, LogLevel.Critical);
     options.EnableDetailedErrors();
 });
