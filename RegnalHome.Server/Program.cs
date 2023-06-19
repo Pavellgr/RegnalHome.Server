@@ -22,11 +22,9 @@ var app = builder.Build();
 
 app.MapControllers();
 
-app.MapGet("/", async _ => await Task.FromResult("Welcome to RegnalHome.Server"));
+app.MapGet("/", () => "Welcome to RegnalHome.Server");
 
 app.Urls.Add(Configuration.Server.HostingUrl);
-app.Urls.Add(Configuration.Server.HostingUrl.Replace("https://", "http://").Replace(":443", ":80"));
-app.Urls.Add(Configuration.Server.HostingUrl.Replace("https://", "http://").Replace(":443", ":8080"));
 
 app.UseDeveloperExceptionPage();
 
