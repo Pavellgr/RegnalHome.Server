@@ -22,6 +22,8 @@ var app = builder.Build();
 
 app.MapControllers();
 
+app.MapGet("/", async _ => await Task.FromResult("Welcome to RegnalHome.Server"));
+
 app.Urls.Add(Configuration.Server.HostingUrl);
 
 app.UseDeveloperExceptionPage();
