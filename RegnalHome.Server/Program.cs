@@ -34,19 +34,8 @@ app.Run();
 
 async Task InitDatabase(WebApplication webApplication)
 {
-    using var serviceScope = app.Services.GetService<IServiceScopeFactory>().CreateScope();
-    var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    var dbContextFactory = webApplication.Services.GetService<IDbContextFactory<ApplicationDbContext>>();
+    using var dbContext = await dbContextFactory.CreateDbContextAsync();
 
-    Console.Write("Connecting to database....");
-
-    if (dbContext.Database.CanConnect())
-    {
-        Console.WriteLine("Connected.");
-
-        await dbContext.Database.MigrateAsync();
-    }
-    else
-    {
-        Console.WriteLine("Not connected.");
-    }
+    await dbContext.Database.MigrateAsync();
 }
