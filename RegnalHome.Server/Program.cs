@@ -32,7 +32,7 @@ app.UseDeveloperExceptionPage();
 
 app.Run();
 
-async Task InitDatabase(WebApplication webApplication, CancellationToken cancellationToken)
+async Task InitDatabase(WebApplication webApplication)
 {
     using var serviceScope = app.Services.GetService<IServiceScopeFactory>().CreateScope();
     var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -43,7 +43,7 @@ async Task InitDatabase(WebApplication webApplication, CancellationToken cancell
     {
         Console.WriteLine("Connected.");
 
-        await dbContext.Database.MigrateAsync(cancellationToken);
+        await dbContext.Database.MigrateAsync();
     }
     else
     {
