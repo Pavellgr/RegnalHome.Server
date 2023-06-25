@@ -22,7 +22,7 @@ namespace RegnalHome.Server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("RegnalHome.Common.Models.IrrigationModule", b =>
+            modelBuilder.Entity("RegnalHome.Server.DTOs.IrrigationModuleDTO", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

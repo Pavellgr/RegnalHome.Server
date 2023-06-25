@@ -1,24 +1,24 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RegnalHome.Common.Models;
+using RegnalHome.Server.DTOs;
 
 namespace RegnalHome.Server;
 
 public class ApplicationDbContext : DbContext
 {
-  public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-    : base(options)
-  {
-  }
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options)
+    {
+    }
 
-  public DbSet<IrrigationModule> IrrigationModules { get; }
+    public DbSet<IrrigationModuleDTO> IrrigationModules { get; set; }
 
-  protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-  {
-    base.OnConfiguring(optionsBuilder);
-  }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+    }
 
-  protected override void OnModelCreating(ModelBuilder modelBuilder)
-  {
-    base.OnModelCreating(modelBuilder);
-  }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+    }
 }

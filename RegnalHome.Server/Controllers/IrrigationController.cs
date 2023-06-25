@@ -8,19 +8,19 @@ namespace RegnalHome.Server.Controllers;
 [ApiController]
 public class IrrigationController : ControllerBase
 {
-  private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
+    private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
 
-  public IrrigationController(IDbContextFactory<ApplicationDbContext> dbContextFactory)
-  {
-    _dbContextFactory = dbContextFactory;
-  }
-
-  [HttpGet]
-  public async Task<IrrigationModule?> Get(Guid id, CancellationToken cancellationToken)
-  {
-    using (var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken))
+    public IrrigationController(IDbContextFactory<ApplicationDbContext> dbContextFactory)
     {
-      return await dbContext.IrrigationModules.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+        _dbContextFactory = dbContextFactory;
     }
-  }
+
+    [HttpGet]
+    public async Task<IrrigationModule?> Get(Guid id, CancellationToken cancellationToken)
+    {
+        using (var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken))
+        {
+            return await dbContext.IrrigationModules.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+        }
+    }
 }

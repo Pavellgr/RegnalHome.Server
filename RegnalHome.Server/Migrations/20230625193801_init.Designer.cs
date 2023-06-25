@@ -12,8 +12,8 @@ using RegnalHome.Server;
 namespace RegnalHome.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230615205446_Init")]
-    partial class Init
+    [Migration("20230625193801_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,16 +25,13 @@ namespace RegnalHome.Server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("RegnalHome.Common.Models.IrrigationModule", b =>
+            modelBuilder.Entity("RegnalHome.Server.DTOs.IrrigationModuleDTO", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("IrrigationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("LastCommunication")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
