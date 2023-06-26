@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using RegnalHome.Common;
 using RegnalHome.Server;
 using RegnalHome.Server.Executor;
@@ -8,11 +10,23 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(Configuration.Server.Sql.ConnectionStrings.RegnalHome.Server);
-    options.LogTo(Console.WriteLine, LogLevel.Critical);
-    options.EnableDetailedErrors();
 });
 
 // Add services to the container.
+builder.Services.AddGrpc(o => { });
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer("Bearer",
+        options =>
+        {
+            options.Authority = RegnalHome.Common.RegnalIdentity.Configuration.IdentityServer.IdentityServerUrl;
+
+            options.TokenValidationParameters = new
+                TokenValidationParameters
+                {
+                    ValidateAudience = false
+                };
+        });
 
 builder.Services.AddControllers();
 
@@ -21,6 +35,9 @@ builder.Services.AddSingleton<Executor>();
 var app = builder.Build();
 
 await InitDatabase(app);
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RegnalHome.Common.Models;
 
 namespace RegnalHome.Server.Controllers;
 
-[Route("[controller]")]
 [ApiController]
+[Route("[controller]")]
 public class IrrigationController : ControllerBase
 {
     private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
