@@ -1,11 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-  <base-config>
+  <domain-config>
+    <domain includeSubdomains="true">regnal.home</domain>
     <trust-anchors>
-      <!-- Trust preinstalled CAs -->
-      <certificates src="system" />
-      <!-- Additionaly trusted user added CAs -->
-      <certificates src="user"/>
+      <certificates src="@raw/my_ca"/>
     </trust-anchors>
-  </base-config>
+  </domain-config>
 </network-security-config>
