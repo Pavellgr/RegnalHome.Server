@@ -1,0 +1,42 @@
+﻿@using RegnalHome.App.Authentication;
+@using RegnalHome.App.Services;
+@inject IAuthenticationService authenticationService;
+@inject ISettingsService settings;
+
+@if (settings.IsAuthenticated)
+{    
+    <button x:Name="LogoutBtn"
+            SemanticProperties.Hint="Click to log out"
+            @onclick="authenticationService.LogoutAsync"
+            HorizontalOptions="Center" >
+        <img src="~/"/>
+    </button>
+}
+else
+{
+    <h3>Login</h3>
+    <button x:Name="LoginBtn"
+            Text="Log In"
+            SemanticProperties.Hint="Click to log in"
+            @onclick="authenticationService.LoginAsync"
+            HorizontalOptions="Center" />
+}
+
+<style>
+    button{
+        width:auto;
+        height:auto;
+    }
+</style>
+
+@code {
+    private async void OnLoginClicked(object sender, EventArgs e)
+    {
+        await authenticationService.LoginAsync();
+    }
+
+    private async void OnLogoutClicked(object sender, EventArgs e)
+    {
+        await authenticationService.LogoutAsync();
+    }
+}

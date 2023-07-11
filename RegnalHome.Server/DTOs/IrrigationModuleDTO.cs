@@ -5,5 +5,5 @@ namespace RegnalHome.Server.DTOs;
 
 public class IrrigationModuleDTO : IrrigationModule
 {
-    [NotMapped] public DateTime LastCommunication { get; set; }
+    [NotMapped] public new DateTime LastCommunication { get; set; }
 }
