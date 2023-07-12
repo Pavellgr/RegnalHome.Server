@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Authorization;
+@using RegnalHome.Common.Models;
+@attribute [Authorize]
+
+<h3>Irrigation</h3>
+
+@if (IsModulesLoaded)
+{
+    <table>
+        <thead>
+            <tr>
+                <td>Id</td>
+                <td>Name</td>
+                <td>LastCommunication</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var module in IrrigationModules)
+            {
+                <tr>
+                    <td>@module.Id</td>
+                    <td>@module.Name</td>
+                    <td>@module.LastCommunication.ToString("G")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Loading...</p>
+}
+
+@code {
+    public bool IsModulesLoaded { get; private set; }
+
+    public IEnumerable<IrrigationModule> IrrigationModules { get; } = new List<IrrigationModule>();
+
+}

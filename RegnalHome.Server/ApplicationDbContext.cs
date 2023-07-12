@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RegnalHome.Server.DTOs;
+using RegnalHome.Common.Dtos;
 
 namespace RegnalHome.Server;
 
