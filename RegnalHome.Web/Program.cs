@@ -16,7 +16,7 @@ builder.Services.AddOidcAuthentication(options =>
     options.ProviderOptions.ClientId = RegnalHome.Common.RegnalIdentity.Configuration.IdentityServer.Clients.RegnalHome.Server.ClientId;
     options.ProviderOptions.DefaultScopes.Add(RegnalHome.Common.RegnalIdentity.Configuration.IdentityServer.Clients.RegnalHome.Server.AllowedScopes.Server);
     options.ProviderOptions.DefaultScopes.Add(RegnalHome.Common.RegnalIdentity.Configuration.IdentityServer.Clients.RegnalHome.Server.AllowedScopes.Irrigation);
-    options.ProviderOptions.ResponseType = "id_token";
+    options.ProviderOptions.ResponseType = "code";
 });
 
 await builder.Build().RunAsync();
