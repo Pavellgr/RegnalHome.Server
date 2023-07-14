@@ -8,13 +8,13 @@ public static class DateTimeExtensions
     {
         return new DateTime
         {
-            Date =
+            Date = new Common.Grpc.Date
             {
                 Day = dateTime.Day,
                 Month = dateTime.Month,
                 Year = dateTime.Year
             },
-            Time =
+            Time = new Common.Grpc.Time
             {
                 Hour = dateTime.Hour,
                 Minute = dateTime.Minute,

@@ -6,3 +6,11 @@ services:
     build:
       context: .
       dockerfile: RegnalHome.Server/Dockerfile
+
+
+  regnalhome.web:
+    image: ${DOCKER_REGISTRY-}regnalhomeweb
+    build:
+      context: .
+      dockerfile: RegnalHome.Web/Dockerfile
+

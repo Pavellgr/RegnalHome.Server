@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using RegnalHome.Common;
 using RegnalHome.Server;
 using RegnalHome.Server.Executor;
+using RegnalHome.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +14,7 @@ builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
 });
 
 // Add services to the container.
-builder.Services.AddGrpc(o => { });
+builder.Services.AddGrpc();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer("Bearer",
@@ -41,9 +42,17 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapGrpcService<ServerService>().EnableGrpcWeb();
+app.MapGrpcService<IrrigationService>().EnableGrpcWeb();
+
 app.MapGet("/", () => "Welcome to RegnalHome.Server");
 
 app.Urls.Add(Configuration.Server.HostingUrl);
+
+app.UseCors(c => c.AllowAnyOrigin()
+.AllowAnyHeader()
+.AllowAnyMethod());
+app.UseGrpcWeb();
 
 app.UseDeveloperExceptionPage();
 

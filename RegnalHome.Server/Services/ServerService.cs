@@ -1,7 +1,6 @@
 ﻿using Grpc.Core;
 using Microsoft.EntityFrameworkCore;
 using RegnalHome.Common.Grpc;
-using RegnalHome.Server.Extensions;
 using DateTime = System.DateTime;
 
 namespace RegnalHome.Server.Services;
@@ -44,29 +43,6 @@ public class ServerService : Grpc.Server.ServerBase
                 startTime = DateTime.Now;
                 await Task.Delay(500);
             }
-        }
-    }
-
-    public override Task<IrrigationModules> GetIrrigationModules(Empty request, ServerCallContext context)
-    {
-        using (var dbContext = _dbContextFactory.CreateDbContext())
-        {
-            var modules = dbContext.IrrigationModules;
-
-            return Task.FromResult(new IrrigationModules
-            {
-                Modules =
-                {
-                    modules.Select(p => new IrrigationModule
-                    {
-                        Id = p.Id.ToString(),
-                        Name = p.Name,
-                        IrrigationTime = p.IrrigationTime.ToGrpc(),
-                        IrrigationLengthMinutes = p.irrigationLengthMinutes,
-                        LastCommunication = DateTime.Now.ToGrpc()
-                    })
-                }
-            });
         }
     }
 }

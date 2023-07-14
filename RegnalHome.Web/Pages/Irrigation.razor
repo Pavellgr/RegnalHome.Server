@@ -1,13 +1,19 @@
 ﻿@page "/irrigation"
 @using Microsoft.AspNetCore.Authorization;
 @using RegnalHome.Common.Models;
+@using RegnalHome.Web.Services;
+@inject IrrigationService irrigationService;
 @attribute [Authorize]
 
 <h3>Irrigation</h3>
 
-@if (IsModulesLoaded)
+@if (IrrigationModules == null)
 {
-    <table>
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
         <thead>
             <tr>
                 <td>Id</td>
@@ -18,7 +24,7 @@
         <tbody>
             @foreach (var module in IrrigationModules)
             {
-                <tr>
+                <tr onclick="window.location='#';">
                     <td>@module.Id</td>
                     <td>@module.Name</td>
                     <td>@module.LastCommunication.ToString("G")</td>
@@ -27,14 +33,12 @@
         </tbody>
     </table>
 }
-else
-{
-    <p>Loading...</p>
-}
 
 @code {
-    public bool IsModulesLoaded { get; private set; }
+    public IrrigationModule[]? IrrigationModules { get; private set; }
 
-    public IEnumerable<IrrigationModule> IrrigationModules { get; } = new List<IrrigationModule>();
-
+    protected override async Task OnInitializedAsync()
+    {
+        IrrigationModules = await irrigationService.GetModules();
+    }
 }
