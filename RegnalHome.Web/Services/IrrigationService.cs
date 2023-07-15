@@ -18,9 +18,9 @@ namespace RegnalHome.Web.Services
             return modules.Modules.Select(p => p.FromGrpc<IrrigationModule>()).ToArray();
         }
 
-        public IrrigationModule GetModule(string id)
+        public async Task<IrrigationModule> GetModule(string id)
         {
-            var module = _client.GetIrrigationModule(new Common.Grpc.Id
+            var module = await _client.GetIrrigationModuleAsync(new Common.Grpc.Id
             {
                 Id_ = id
             });

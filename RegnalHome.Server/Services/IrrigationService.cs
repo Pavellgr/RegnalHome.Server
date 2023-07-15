@@ -26,16 +26,26 @@ public class IrrigationService : RegnalHome.Irrigation.Grpc.Irrigation.Irrigatio
             {
                 Modules =
                 {
-                    modules.Select(p => new IrrigationModule
-                    {
-                        Id = p.Id.ToString(),
-                        Name = p.Name,
-                        IrrigationTime = p.IrrigationTime.ToGrpc(),
-                        IrrigationLengthMinutes = p.IrrigationLengthMinutes,
-                        LastCommunication = System.DateTime.Now.ToGrpc()
-                    })
+                    modules.Select(p => p.ToGrpc<RegnalHome.Irrigation.Grpc.IrrigationModule>())
                 }
             });
         }
+    }
+
+    public override async Task<IrrigationModule> GetIrrigationModule(Id request, ServerCallContext context)
+    {
+        using (var dbContext = _dbContextFactory.CreateDbContext())
+        {
+            if (Guid.TryParse(request.Id_, out var id))
+            {
+                var module = await dbContext.IrrigationModules.FirstOrDefaultAsync(p => p.Id == id);
+                if (module != null)
+                {
+                    return module.ToGrpc<RegnalHome.Irrigation.Grpc.IrrigationModule>();
+                }
+            }
+        }
+
+        throw new ArgumentException($"Module for id '{request.Id_}' not found.");
     }
 }

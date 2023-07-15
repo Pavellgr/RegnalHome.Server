@@ -11,7 +11,7 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegnalHome.App", "RegnalHome.App\RegnalHome.App.csproj", "{C35EC835-5E80-43BA-8C34-DF23BE47038B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegnalHome.Web", "RegnalHome.Web\RegnalHome.Web.csproj", "{AC3AE809-72DE-4B87-9F79-539197E0F1A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegnalHome.Web", "RegnalHome.Web\RegnalHome.Web.csproj", "{AC3AE809-72DE-4B87-9F79-539197E0F1A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

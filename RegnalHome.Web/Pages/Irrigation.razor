@@ -24,7 +24,7 @@ else
         <tbody>
             @foreach (var module in IrrigationModules)
             {
-                <tr onclick="window.location='#';">
+                <tr onclick="window.location='/irrigation/@module.Id';">
                     <td>@module.Id</td>
                     <td>@module.Name</td>
                     <td>@module.LastCommunication.ToString("G")</td>

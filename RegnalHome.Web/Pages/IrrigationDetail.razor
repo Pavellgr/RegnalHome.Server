@@ -1,0 +1,64 @@
+﻿@page "/irrigation/{id}"
+@using Microsoft.AspNetCore.Authorization;
+@using RegnalHome.Common.Models;
+@using RegnalHome.Web.Services;
+@inject IrrigationService IrrigationService;
+@inject ITranslationService Translation;
+@attribute [Authorize]
+
+<h3>IrrigationDetail</h3>
+<p>@id</p>
+
+@if (IrrigationModule == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="@IrrigationModule" OnValidSubmit="FormSubmit">
+        <div>
+            <label>@Translation.Get(nameof(IrrigationModule.Id))</label>
+            <label>@IrrigationModule.Id</label>
+        </div>
+        <div>
+            <label>@Translation.Get(nameof(IrrigationModule.LastCommunication))</label>
+            <label>@IrrigationModule.LastCommunication</label>
+        </div>
+        <div>
+            <label>@Translation.Get(nameof(IrrigationModule.Name))</label>
+            <InputText @bind-Value=IrrigationModule.Name />
+        </div>
+        <div>
+            <label>@Translation.Get(nameof(IrrigationModule.IrrigationLengthMinutes))</label>
+            <InputNumber @bind-Value=IrrigationModule.IrrigationLengthMinutes />
+        </div>
+        <div>
+            <label>@Translation.Get(nameof(IrrigationModule.IrrigationTime))</label>
+            <InputDate Type="InputDateType.Time" @bind-Value=IrrigationModule.IrrigationTime />
+        </div>
+        <div>
+            <button type="submit">@Translation.Get("Submit")</button>
+        </div>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public string? id { get; set; }
+
+    public IrrigationModule? IrrigationModule { get; private set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (id != null &&
+        Guid.TryParse(id, out _))
+        {
+            IrrigationModule = await IrrigationService.GetModule(id);
+        }
+    }
+
+    private async Task FormSubmit()
+    {
+        await Task.CompletedTask;
+    }
+}

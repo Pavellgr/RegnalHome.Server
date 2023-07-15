@@ -32,5 +32,6 @@ builder.Services.AddSingleton(_ =>
 builder.Services.AddScoped(provider => new RegnalHome.Irrigation.Grpc.Irrigation.IrrigationClient(provider.GetRequiredService<GrpcChannel>()));
 
 builder.Services.AddScoped<IrrigationService>();
+builder.Services.AddSingleton<ITranslationService, TranslationService>();
 
 await builder.Build().RunAsync();

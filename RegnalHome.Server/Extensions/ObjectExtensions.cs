@@ -1,6 +1,6 @@
 ﻿using RegnalHome.Common.Models;
 
-namespace RegnalHome.Web.Extensions
+namespace RegnalHome.Server.Extensions
 {
     public static class ObjectExtensions
     {
@@ -24,9 +24,9 @@ namespace RegnalHome.Web.Extensions
                 } as T;
             }
             else if (obj is IrrigationModule irrigationModule &&
-                typeof(T) == typeof(Irrigation.Grpc.IrrigationModule))
+                typeof(T) == typeof(RegnalHome.Irrigation.Grpc.IrrigationModule))
             {
-                return new Irrigation.Grpc.IrrigationModule
+                return new RegnalHome.Irrigation.Grpc.IrrigationModule
                 {
                     Id = irrigationModule.Id.ToString(),
                     Name = irrigationModule.Name,
@@ -41,7 +41,7 @@ namespace RegnalHome.Web.Extensions
 
         public static T FromGrpc<T>(this object obj) where T : class
         {
-            if (obj is Irrigation.Grpc.IrrigationModule irrigationModule &&
+            if (obj is RegnalHome.Irrigation.Grpc.IrrigationModule irrigationModule &&
                 typeof(T) == typeof(IrrigationModule))
             {
                 return new IrrigationModule
