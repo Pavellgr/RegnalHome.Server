@@ -17,27 +17,27 @@ else
 {
     <EditForm Model="@IrrigationModule" OnValidSubmit="FormSubmit">
         <div>
-            <label>@Translation.Get(nameof(IrrigationModule.Id))</label>
+            <label class="col-md-2">@Translation.Get(nameof(IrrigationModule.Id))</label>
             <label>@IrrigationModule.Id</label>
         </div>
         <div>
-            <label>@Translation.Get(nameof(IrrigationModule.LastCommunication))</label>
+            <label class="col-md-2">@Translation.Get(nameof(IrrigationModule.LastCommunication))</label>
             <label>@IrrigationModule.LastCommunication</label>
         </div>
         <div>
-            <label>@Translation.Get(nameof(IrrigationModule.Name))</label>
+            <label class="col-md-2">@Translation.Get(nameof(IrrigationModule.Name))</label>
             <InputText @bind-Value=IrrigationModule.Name />
         </div>
         <div>
-            <label>@Translation.Get(nameof(IrrigationModule.IrrigationLengthMinutes))</label>
+            <label class="col-md-2">@Translation.Get(nameof(IrrigationModule.IrrigationLengthMinutes))</label>
             <InputNumber @bind-Value=IrrigationModule.IrrigationLengthMinutes />
         </div>
         <div>
-            <label>@Translation.Get(nameof(IrrigationModule.IrrigationTime))</label>
+            <label class="col-md-2">@Translation.Get(nameof(IrrigationModule.IrrigationTime))</label>
             <InputDate Type="InputDateType.Time" @bind-Value=IrrigationModule.IrrigationTime />
         </div>
         <div>
-            <button type="submit">@Translation.Get("Submit")</button>
+            <button class="oi-align-right" type="submit">@Translation.Get("Submit")</button>
         </div>
     </EditForm>
 }
@@ -59,6 +59,6 @@ else
 
     private async Task FormSubmit()
     {
-        await Task.CompletedTask;
+        await IrrigationService.UpdateModule(IrrigationModule);
     }
 }

@@ -13,6 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\RegnalHome.Server\Extensions\ObjectExtensions.cs" Link="Extensions\ObjectExtensions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="regnalCA.cer">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -40,6 +44,10 @@
     <Protobuf Include="..\RegnalHome.Common\Protos\irrigation.proto" GrpcServices="Client" />
     <Protobuf Include="..\RegnalHome.Common\Protos\server.proto" GrpcServices="Client" />
     <Protobuf Include="..\RegnalHome.Common\Protos\common.proto" GrpcServices="None" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Extensions\" />
   </ItemGroup>
 
 </Project>

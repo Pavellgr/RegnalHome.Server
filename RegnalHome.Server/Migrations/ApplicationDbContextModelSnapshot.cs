@@ -22,11 +22,14 @@ namespace RegnalHome.Server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("RegnalHome.Server.DTOs.IrrigationModuleDTO", b =>
+            modelBuilder.Entity("RegnalHome.Common.Dtos.IrrigationModuleDTO", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("IrrigationLengthMinutes")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("IrrigationTime")
                         .HasColumnType("datetime2");
@@ -34,12 +37,28 @@ namespace RegnalHome.Server.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("irrigationLengthMinutes")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("IrrigationModules");
+                });
+
+            modelBuilder.Entity("RegnalHome.Common.Models.Log", b =>
+                {
+                    b.Property<int>("Component")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LogLevel")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Component");
+
+                    b.ToTable("Log");
                 });
 #pragma warning restore 612, 618
         }
