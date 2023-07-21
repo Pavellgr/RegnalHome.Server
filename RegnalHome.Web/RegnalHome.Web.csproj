@@ -45,9 +45,5 @@
     <Protobuf Include="..\RegnalHome.Common\Protos\server.proto" GrpcServices="Client" />
     <Protobuf Include="..\RegnalHome.Common\Protos\common.proto" GrpcServices="None" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-  </ItemGroup>
 
 </Project>

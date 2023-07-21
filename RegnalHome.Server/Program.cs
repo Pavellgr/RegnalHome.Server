@@ -42,12 +42,13 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapGrpcService<ServerService>().EnableGrpcWeb();
-app.MapGrpcService<IrrigationService>().EnableGrpcWeb();
+app.MapGrpcService<ServerService>().EnableGrpcWeb();//.RequireAuthorization();
+app.MapGrpcService<IrrigationService>().EnableGrpcWeb();//.RequireAuthorization();
 
 app.MapGet("/", () => "Welcome to RegnalHome.Server");
 
 app.Urls.Add(Configuration.Server.HostingUrl);
+app.Urls.Add(Configuration.Server.SslHostingUrl);
 
 app.UseCors(c => c.AllowAnyOrigin()
 .AllowAnyHeader()
