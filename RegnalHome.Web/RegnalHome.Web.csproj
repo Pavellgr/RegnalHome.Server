@@ -45,5 +45,11 @@
     <Protobuf Include="..\RegnalHome.Common\Protos\server.proto" GrpcServices="Client" />
     <Protobuf Include="..\RegnalHome.Common\Protos\common.proto" GrpcServices="None" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <None Update="nginx.conf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>
