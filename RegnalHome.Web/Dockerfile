@@ -5,7 +5,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["RegnalHome.Web/RegnalHome.Web.csproj", "RegnalHome.Web"]
-RUN dotnet restore "RegnalHome.Web.csproj"
+RUN dotnet restore "/RegnalHome.Web/RegnalHome.Web.csproj"
 COPY . .
 WORKDIR "/RegnalHome.Web"
 RUN dotnet build "RegnalHome.Web.csproj" -c Release -o /app/build
