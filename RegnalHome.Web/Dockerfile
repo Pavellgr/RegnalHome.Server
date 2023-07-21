@@ -4,9 +4,10 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-RUN dotnet restore "RegnalHome.Web.csproj"
+COPY ["RegnalHome.Web/RegnalHome.Web.csproj", "RegnalHome.Web"]
+RUN dotnet restore "RegnalHome.Web/RegnalHome.Web.csproj"
 COPY . .
-WORKDIR "/"
+WORKDIR "/RegnalHome.Web"
 RUN dotnet build "RegnalHome.Web.csproj" -c Release -o /app/build
 
 FROM build AS publish
