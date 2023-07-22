@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="nginx.conf" />
     <None Remove="regnalCA.cer" />
   </ItemGroup>
 
@@ -47,9 +48,9 @@
   </ItemGroup>
   
   <ItemGroup>
-    <None Update="nginx.conf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <Resource Include="nginx.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>
