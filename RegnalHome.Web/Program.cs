@@ -12,13 +12,16 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+var baseAddress = builder.HostEnvironment.BaseAddress;
+
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(baseAddress) });
 
 builder.Services.AddOidcAuthentication(options =>
 {
     options.ProviderOptions.Authority = RegnalHome.Common.RegnalIdentity.Configuration.IdentityServer.IdentityServerUrl;
 
-    options.ProviderOptions.RedirectUri = RegnalHome.Common.RegnalIdentity.Configuration.IdentityServer.Clients.RegnalHome.Server.RedirectUrl;
+    options.ProviderOptions.RedirectUri = RegnalHome.Common.RegnalIdentity.Configuration.IdentityServer.Clients.RegnalHome.Server.GetRedirectUrl(baseAddress);
+    options.ProviderOptions.PostLogoutRedirectUri = RegnalHome.Common.RegnalIdentity.Configuration.IdentityServer.Clients.RegnalHome.Server.GetPostLogoutRedirectUrl(baseAddress);
     options.ProviderOptions.ClientId = RegnalHome.Common.RegnalIdentity.Configuration.IdentityServer.Clients.RegnalHome.Server.ClientId;
     options.ProviderOptions.DefaultScopes.Add(RegnalHome.Common.RegnalIdentity.Configuration.IdentityServer.Clients.RegnalHome.Server.AllowedScopes.Server);
     options.ProviderOptions.DefaultScopes.Add(RegnalHome.Common.RegnalIdentity.Configuration.IdentityServer.Clients.RegnalHome.Server.AllowedScopes.Irrigation);
@@ -35,7 +38,7 @@ builder.Services.AddScoped(serviceProvider =>
         tokenResult.TryGetToken(out var token);
         metadata.Add("Authorization", $"Bearer {token.Value}");
     });
-    var grpcAddress = RegnalHome.Common.Configuration.Server.GetUrl(builder.HostEnvironment.BaseAddress);
+    var grpcAddress = RegnalHome.Common.Configuration.Server.GetUrl(baseAddress);
     Console.WriteLine($"GRPC address: {grpcAddress}");
 
     return GrpcChannel.ForAddress(grpcAddress, new GrpcChannelOptions
