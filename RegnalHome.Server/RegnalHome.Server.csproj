@@ -9,16 +9,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Remove="regnalCA.cer" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Content Include="regnalCA.cer">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Grpc.AspNetCore" Version="2.54.0" />
         <PackageReference Include="Grpc.AspNetCore.Web" Version="2.55.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.19" />

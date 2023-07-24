@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using RegnalHome.Web;
 using RegnalHome.Web.Services;
-using System.Net.Mime;
+using System.Diagnostics;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -35,8 +35,10 @@ builder.Services.AddScoped(serviceProvider =>
         tokenResult.TryGetToken(out var token);
         metadata.Add("Authorization", $"Bearer {token.Value}");
     });
+    var grpcAddress = RegnalHome.Common.Configuration.Server.GetUrl(builder.HostEnvironment.BaseAddress);
+    Console.WriteLine($"GRPC address: {grpcAddress}");
 
-    return GrpcChannel.ForAddress(RegnalHome.Common.Configuration.Server.SslHostingUrl.Replace("0.0.0.0", "localhost"), new GrpcChannelOptions
+    return GrpcChannel.ForAddress(grpcAddress, new GrpcChannelOptions
     {
         HttpHandler = httpHandler,
         //Credentials = ChannelCredentials.Create(new SslCredentials(), credentials)

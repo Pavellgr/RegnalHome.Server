@@ -10,17 +10,10 @@
 
   <ItemGroup>
     <None Remove="nginx.conf" />
-    <None Remove="regnalCA.cer" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Include="..\RegnalHome.Server\Extensions\ObjectExtensions.cs" Link="Extensions\ObjectExtensions.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="regnalCA.cer">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>
