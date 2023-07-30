@@ -1,13 +1,14 @@
 ﻿@page "/irrigation/{id}"
+@using Blazored.Toast.Services;
 @using Microsoft.AspNetCore.Authorization;
 @using RegnalHome.Common.Models;
 @using RegnalHome.Web.Services;
 @inject IrrigationService IrrigationService;
 @inject ITranslationService Translation;
+@inject IToastService toastService;
 @attribute [Authorize]
 
 <h3>IrrigationDetail</h3>
-<p>@id</p>
 
 @if (IrrigationModule == null)
 {
@@ -59,6 +60,15 @@ else
 
     private async Task FormSubmit()
     {
-        await IrrigationService.UpdateModule(IrrigationModule);
+        try
+        {
+            await IrrigationService.UpdateModule(IrrigationModule);
+            toastService.ShowSuccess("Saved successfully");
+
+        }
+        catch (Exception e)
+        {
+            toastService.ShowError($"Error occurred.\n{e.Message}");
+        }
     }
 }

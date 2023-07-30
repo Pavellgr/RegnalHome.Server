@@ -1,3 +1,4 @@
+using Blazored.Toast;
 using Grpc.Core;
 using Grpc.Net.Client;
 using Grpc.Net.Client.Web;
@@ -47,6 +48,8 @@ builder.Services.AddScoped(serviceProvider =>
         //Credentials = ChannelCredentials.Create(new SslCredentials(), credentials)
     });
 });
+
+builder.Services.AddBlazoredToast();
 
 builder.Services.AddScoped(provider =>
 {
