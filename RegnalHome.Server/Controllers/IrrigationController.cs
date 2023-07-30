@@ -20,7 +20,16 @@ public class IrrigationController : ControllerBase
     {
         using (var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken))
         {
-            return await dbContext.IrrigationModules.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+            var module = await dbContext.IrrigationModules.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+            if (module != null)
+            {
+                module.LastCommunication = DateTime.Now;
+                await dbContext.SaveChangesAsync(cancellationToken);
+
+                return module;
+            }
+
+            return null;
         }
     }
 }
