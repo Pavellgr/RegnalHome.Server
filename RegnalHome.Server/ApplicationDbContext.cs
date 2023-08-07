@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RegnalHome.Common.Dtos;
 using RegnalHome.Common.Models;
 
 namespace RegnalHome.Server;
@@ -11,7 +10,7 @@ public class ApplicationDbContext : DbContext
     {
     }
 
-    public DbSet<IrrigationModuleDTO> IrrigationModules { get; set; }
+    public DbSet<IrrigationModule> IrrigationModules { get; set; }
 
     public DbSet<Log> Log { get; set; }
 

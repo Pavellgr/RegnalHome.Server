@@ -24,14 +24,25 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
             options.TokenValidationParameters = new
                 TokenValidationParameters
-                {
-                    ValidateAudience = false
-                };
+            {
+                ValidateAudience = false
+            };
         });
 
 builder.Services.AddControllers();
 
 builder.Services.AddSingleton<Executor>();
+
+builder.Services.AddHttpLogging(config =>
+{
+    foreach (var name in config.RequestHeaders.ToList())
+    {
+        if (name != "Host")
+            config.RequestHeaders.Remove(name);
+    }
+
+    config.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestHeaders;
+});
 
 var app = builder.Build();
 
@@ -56,6 +67,8 @@ app.UseCors(c => c.AllowAnyOrigin()
 app.UseGrpcWeb();
 
 app.UseDeveloperExceptionPage();
+
+app.UseHttpLogging();
 
 app.Run();
 

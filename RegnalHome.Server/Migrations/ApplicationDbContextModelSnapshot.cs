@@ -22,7 +22,7 @@ namespace RegnalHome.Server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("RegnalHome.Common.Dtos.IrrigationModuleDTO", b =>
+            modelBuilder.Entity("RegnalHome.Common.Models.IrrigationModule", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -32,6 +32,9 @@ namespace RegnalHome.Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("IrrigationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastCommunication")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
