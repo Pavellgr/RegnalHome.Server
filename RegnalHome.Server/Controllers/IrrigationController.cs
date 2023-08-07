@@ -29,9 +29,9 @@ public class IrrigationController : ControllerBase
             var module = await dbContext.IrrigationModules.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
             if (module != null)
             {
-                if (userAgent == "ESP8266HTTPClient")
+                if (userAgent != "ESP8266HTTPClient")
                 {
-                    var timeZone = TimeZoneInfo.GetSystemTimeZones().FirstOrDefault(p => p.StandardName.Contains("UTC+01:00"));
+                    var timeZone = TimeZoneInfo.GetSystemTimeZones().FirstOrDefault(p => p.DisplayName.Contains("Praha"));
                     module.LastCommunication = TimeZoneInfo.ConvertTime(DateTime.UtcNow, timeZone);
                     await dbContext.SaveChangesAsync(cancellationToken);
                 }
