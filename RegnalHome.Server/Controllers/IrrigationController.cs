@@ -20,15 +20,15 @@ public class IrrigationController : ControllerBase
     [HttpGet]
     public async Task<IrrigationModule?> Get(Guid id, CancellationToken cancellationToken)
     {
-        HttpContext.Request.Headers.TryGetValue("Host", out var host);
-        Console.WriteLine($"Get IrrigationModule Host: {host}, RemoteIpAddress: {HttpContext.Features.Get<IHttpConnectionFeature>()?.RemoteIpAddress}");
+        HttpContext.Request.Headers.TryGetValue("User-Agent", out var userAgent);
+        Console.WriteLine($"Get IrrigationModule User-Agent: {userAgent}, RemoteIpAddress: {HttpContext.Features.Get<IHttpConnectionFeature>()?.RemoteIpAddress}");
 
         using (var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken))
         {
             var module = await dbContext.IrrigationModules.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
             if (module != null)
             {
-                if (host == nameof(Common.RegnalIdentity.Configuration.IdentityServer.Clients.RegnalHome.Irrigation.ClientName))
+                if (userAgent == "ESP8266HTTPClient")
                 {
                     module.LastCommunication = DateTime.Now;
                     await dbContext.SaveChangesAsync(cancellationToken);
