@@ -15,7 +15,12 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 var baseAddress = builder.HostEnvironment.BaseAddress;
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(baseAddress) });
+builder.Services.AddScoped(sp =>
+{
+    var client = new HttpClient { BaseAddress = new Uri(baseAddress) };
+    client.DefaultRequestHeaders.Add("Caller-Name", "RegnalHome.Web");
+    return client;
+});
 
 builder.Services.AddOidcAuthentication(options =>
 {
