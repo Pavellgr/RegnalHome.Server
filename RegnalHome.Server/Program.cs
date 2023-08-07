@@ -33,6 +33,11 @@ builder.Services.AddControllers();
 
 builder.Services.AddSingleton<Executor>();
 
+builder.Services.AddHttpLogging(c =>
+{
+    c.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.All;
+});
+
 var app = builder.Build();
 
 await InitDatabase(app);
@@ -56,6 +61,8 @@ app.UseCors(c => c.AllowAnyOrigin()
 app.UseGrpcWeb();
 
 app.UseDeveloperExceptionPage();
+
+app.UseHttpLogging();
 
 app.Run();
 
