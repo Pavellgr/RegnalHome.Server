@@ -18,7 +18,8 @@ var baseAddress = builder.HostEnvironment.BaseAddress;
 builder.Services.AddScoped(sp =>
 {
     var client = new HttpClient { BaseAddress = new Uri(baseAddress) };
-    client.DefaultRequestHeaders.Add("Caller-Name", "RegnalHome.Web");
+    client.DefaultRequestHeaders.Host = $"{RegnalHome.Common.RegnalIdentity.Configuration.IdentityServer.Clients.RegnalHome.ClientId}.Web";
+
     return client;
 });
 
