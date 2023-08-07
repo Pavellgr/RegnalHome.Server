@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RegnalHome.Common.Models;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace RegnalHome.Server.Controllers;
 
@@ -30,7 +31,8 @@ public class IrrigationController : ControllerBase
             {
                 if (userAgent == "ESP8266HTTPClient")
                 {
-                    module.LastCommunication = DateTime.Now;
+                    var timeZone = TimeZoneInfo.GetSystemTimeZones().FirstOrDefault(p => p.StandardName.Contains("UTC+01:00"));
+                    module.LastCommunication = TimeZoneInfo.ConvertTime(DateTime.UtcNow, timeZone);
                     await dbContext.SaveChangesAsync(cancellationToken);
                 }
 
