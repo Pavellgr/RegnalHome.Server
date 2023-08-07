@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RegnalHome.Common.Models;
+using System.Diagnostics;
 
 namespace RegnalHome.Server.Controllers;
 
@@ -18,6 +20,8 @@ public class IrrigationController : ControllerBase
     [HttpGet]
     public async Task<IrrigationModule?> Get(Guid id, CancellationToken cancellationToken)
     {
+        Console.WriteLine($"Get IrrigationModule RemoteIpAddress: {HttpContext.Connection.RemoteIpAddress}, {HttpContext.Features.Get<IHttpConnectionFeature>()?.RemoteIpAddress}");
+
         using (var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken))
         {
             var module = await dbContext.IrrigationModules.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
