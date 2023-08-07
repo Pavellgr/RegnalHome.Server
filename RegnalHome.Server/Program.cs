@@ -35,13 +35,7 @@ builder.Services.AddSingleton<Executor>();
 
 builder.Services.AddHttpLogging(config =>
 {
-    foreach (var name in config.RequestHeaders.ToList())
-    {
-        if (name != "Host")
-            config.RequestHeaders.Remove(name);
-    }
-
-    config.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestHeaders;
+    config.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.All;
 });
 
 var app = builder.Build();
