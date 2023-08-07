@@ -28,8 +28,8 @@ public class IrrigationController : ControllerBase
             var module = await dbContext.IrrigationModules.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
             if (module != null)
             {
-                if (host == nameof(Common.RegnalIdentity.Configuration.IdentityServer.Clients.RegnalHome.Irrigation.ClientName){
-
+                if (host == nameof(Common.RegnalIdentity.Configuration.IdentityServer.Clients.RegnalHome.Irrigation.ClientName))
+                {
                     module.LastCommunication = DateTime.Now;
                     await dbContext.SaveChangesAsync(cancellationToken);
                 }
