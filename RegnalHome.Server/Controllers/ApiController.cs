@@ -18,11 +18,11 @@ namespace RegnalHome.Server.Controllers
         {
             using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
 
-            var modules = await dbContext.IrrigationModules.ToListAsync(cancellationToken);
+            var module = await dbContext.IrrigationModules.FirstOrDefaultAsync(cancellationToken);
 
             return new JsonResult(new
             {
-                irrigationModules = modules
+                irrigationModule = module
             });
         }
     }
