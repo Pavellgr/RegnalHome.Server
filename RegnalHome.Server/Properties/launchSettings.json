@@ -3,17 +3,19 @@
     "RegnalHome.Server": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": ".less-known/api-docs/ui/",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DOTNET_ENVIRONMENT": "Development"
       },
-      "dotnetRunMessages": true
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:80/"
     },
     "Docker": {
       "commandName": "Docker",
-      "launchBrowser": false,
+      "commandLineArgs": "-p 8080:8080",
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/",
-      "publishAllPorts": true,
-      "commandLineArgs": "-p 8080:8080"
+      "publishAllPorts": true
     }
   }
 }
