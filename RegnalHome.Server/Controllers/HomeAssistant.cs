@@ -21,7 +21,7 @@ namespace RegnalHome.Server.Controllers
             _egdOptions = (EgdOptions)egdOptions;
         }
 
-        [Authorize(Constants.Egd)]
+        //[Authorize(Constants.Egd)]
         [HttpGet(nameof(GetVirtualBatteryStatus))]
         public async Task<IActionResult> GetVirtualBatteryStatus(CancellationToken cancellationToken, [FromHeader] string scope = "RegnalHome.HomeAssistant", [FromHeader] string client_id = "RegnalHome.HomeAssistant", [FromHeader] string client_secret = RegnalHome.Common.RegnalIdentity.Configuration.IdentityServer.Clients.RegnalHome.HomeAssistant.ClientSecret, int? year = null)
         {
