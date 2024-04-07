@@ -37,7 +37,7 @@ namespace RegnalHome.Server.Controllers
             var consumptionTotal = consumption.Sum();
             var productionTotal = production.Sum();
 
-            return Ok(productionTotal - consumptionTotal);
+            return Ok(new[] { productionTotal - consumptionTotal });
         }
     }
 }
