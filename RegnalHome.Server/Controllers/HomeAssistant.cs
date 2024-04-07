@@ -23,7 +23,7 @@ namespace RegnalHome.Server.Controllers
 
         //[Authorize(Constants.Egd)]
         [HttpGet(nameof(GetVirtualBatteryStatus))]
-        public async Task<IActionResult> GetVirtualBatteryStatus(CancellationToken cancellationToken, [FromHeader] string scope = "RegnalHome.HomeAssistant", [FromHeader] string client_id = "RegnalHome.HomeAssistant", [FromHeader] string client_secret = RegnalHome.Common.RegnalIdentity.Configuration.IdentityServer.Clients.RegnalHome.HomeAssistant.ClientSecret, int? year = null)
+        public async Task<IActionResult> GetVirtualBatteryStatus(/*[FromHeader] string scope = "RegnalHome.HomeAssistant", [FromHeader] string client_id = "RegnalHome.HomeAssistant", [FromHeader] string client_secret = RegnalHome.Common.RegnalIdentity.Configuration.IdentityServer.Clients.RegnalHome.HomeAssistant.ClientSecret,*/ int? year = null)
         {
             var today = DateTime.Today;
             var dateFrom = new DateTime(year ?? DateTime.Now.Year, _egdOptions.BeginDateTime.Month, _egdOptions.BeginDateTime.Day);
@@ -31,8 +31,8 @@ namespace RegnalHome.Server.Controllers
                             ? today.AddSeconds(-1)
                             : new DateTime((int)year, today.Month, today.Day);
 
-            var production = await _egdHttpClient.GetProduction(dateFrom, dateTo, cancellationToken);
-            var consumption = await _egdHttpClient.GetConsumption(dateFrom, dateTo, cancellationToken);
+            var production = await _egdHttpClient.GetProduction(dateFrom, dateTo, HttpContext.RequestAborted);
+            var consumption = await _egdHttpClient.GetConsumption(dateFrom, dateTo, HttpContext.RequestAborted);
 
             var consumptionTotal = consumption.Sum();
             var productionTotal = production.Sum();
