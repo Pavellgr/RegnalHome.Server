@@ -34,10 +34,11 @@ namespace RegnalHome.Server.Controllers
             var production = await _egdHttpClient.GetProduction(dateFrom, dateTo, HttpContext.RequestAborted);
             var consumption = await _egdHttpClient.GetConsumption(dateFrom, dateTo, HttpContext.RequestAborted);
 
-            var consumptionTotal = consumption.Sum();
-            var productionTotal = production.Sum();
+            var consumptionTotal = consumption.Sum() / 2;
+            var productionTotal = production.Sum() / 2;
+            var total = productionTotal - consumptionTotal;
 
-            return Ok(new { total = productionTotal - consumptionTotal });
+            return Ok(new { total });
         }
     }
 }
