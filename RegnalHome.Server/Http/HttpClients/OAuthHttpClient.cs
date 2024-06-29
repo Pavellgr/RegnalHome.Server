@@ -17,16 +17,19 @@ namespace RegnalHome.Server.Http.HttpClients
         protected readonly TSettings _settings;
         protected readonly TOptions _options;
         protected readonly TEndpoints _endpoints;
+        private readonly ILogger<OAuthHttpClient<TSettings, TOptions, TEndpoints>> _logger;
 
         public OAuthHttpClient(IHttpClientFactory httpClientFactory,
             TSettings settings,
             TOptions options,
-            TEndpoints endpoints)
+            TEndpoints endpoints,
+            ILogger<OAuthHttpClient<TSettings, TOptions, TEndpoints>> logger)
         {
             _httpClientFactory = httpClientFactory;
             _settings = settings;
             _options = options;
             _endpoints = endpoints;
+            _logger = logger;
         }
 
         public async Task<TokenResponse> Authenticate(CancellationToken cancellationToken)
@@ -66,6 +69,8 @@ namespace RegnalHome.Server.Http.HttpClients
                                                 : isIdentityCall
                                                     ? _options.IdentityServiceUrl
                                                     : string.Empty);
+
+            _logger.LogInformation($"Calling {httpClient.BaseAddress}{uri}");
 
             using var response = await request.Invoke(httpClient, uri);
 

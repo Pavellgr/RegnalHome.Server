@@ -1,10 +1,8 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.WebUtilities;
+﻿using Microsoft.AspNetCore.WebUtilities;
 using RegnalHome.Server.Http.Endpoints;
 using RegnalHome.Server.Http.Options;
 using RegnalHome.Server.Http.Responses;
 using RegnalHome.Server.Http.Settings;
-using System;
 
 namespace RegnalHome.Server.Http.HttpClients
 {
@@ -13,8 +11,9 @@ namespace RegnalHome.Server.Http.HttpClients
         public EgdHttpClient(IHttpClientFactory httpClientFactory,
                              [FromKeyedServices(Constants.Egd)] ITokenSettings settings,
                              [FromKeyedServices(Constants.Egd)] IOAuthOptions options,
-                             [FromKeyedServices(Constants.Egd)] IOAuthEndpoints endpoints)
-            : base(httpClientFactory, (EgdSettings)settings, (EgdOptions)options, (EgdEndpoints)endpoints)
+                             [FromKeyedServices(Constants.Egd)] IOAuthEndpoints endpoints,
+                             ILogger<EgdHttpClient> logger)
+            : base(httpClientFactory, (EgdSettings)settings, (EgdOptions)options, (EgdEndpoints)endpoints, logger)
         {
         }
         public async Task<EgdDataResponse> GetProduction(DateTime dateFrom, DateTime dateTo, CancellationToken cancellationToken)
@@ -68,7 +67,7 @@ namespace RegnalHome.Server.Http.HttpClients
 
             if (result.Items.First().data.Count() >= Constants.EgdPageSize)
             {
-                var nextPage = await GetProductionInner(result.Items.First().data.Max(p=>p.timestamp), dateTo, cancellationToken);
+                var nextPage = await GetProductionInner(result.Items.First().data.Max(p => p.timestamp), dateTo, cancellationToken);
 
                 foreach (var item in nextPage.Items)
                 {

@@ -23,6 +23,7 @@ builder.Services
     .AddGrpc();
 
 builder.Services
+    .AddLogging(o => o.AddConsole())
     .AddServices()
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddScheme<OAuthClientCredentialsOptions, OAuthClientCredentialsHandler>(Constants.Egd, o =>
