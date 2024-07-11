@@ -84,10 +84,12 @@ namespace RegnalHome.Server.Http.HttpClients
             {
                 using var reader = new StreamReader(await response.Content.ReadAsStreamAsync(cancellationToken));
 
+                var responseStr = reader.ReadToEnd();
+
                 var settings = new JsonSerializerSettings();
                 settings.Converters.Add(new EgdDataResponseConverter());
 
-                var responseObj = JsonConvert.DeserializeObject<THttpResponse>(reader.ReadToEnd(), settings);
+                var responseObj = JsonConvert.DeserializeObject<THttpResponse>(responseStr, settings);
 
                 if (responseObj != null &&
                     (responseChecks == null || responseChecks.Invoke(responseObj)))
