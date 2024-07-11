@@ -28,7 +28,7 @@ namespace RegnalHome.Server.Http.HttpClients
             var query = new Dictionary<string, string?>
             {
                 { "ean", _options.Ean },
-                { "profile", "ICH1" },
+                { "profile", "ICQ2" },
                 { "from", dateFrom.ToString("s") },
                 { "to", dateTo.ToString("s") }
             };
@@ -55,7 +55,7 @@ namespace RegnalHome.Server.Http.HttpClients
             var query = new Dictionary<string, string?>
             {
                 { "ean", _options.Ean },
-                { "profile", "ISH1" },
+                { "profile", "ISQ2" },
                 { "from", dateFrom.ToString("s") },
                 { "to", dateTo.ToString("s") }
             };
