@@ -65,6 +65,7 @@ builder.Services.AddCors(cors =>
 );
 
 builder.Services.AddSingleton<Executor>();
+builder.Services.AddTransient<HomeAssistantService>();
 
 var app = builder.Build();
 

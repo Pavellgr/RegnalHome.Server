@@ -1,9 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using RegnalHome.Server.Extensions;
-using RegnalHome.Server.Http.HttpClients;
-using RegnalHome.Server.Http.Options;
-using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using RegnalHome.Server.Services;
 
 namespace RegnalHome.Server.Controllers
 {
@@ -11,38 +7,18 @@ namespace RegnalHome.Server.Controllers
     [Route("[controller]")]
     public class HomeAssistant : Controller
     {
-        private readonly IEgdHttpClient _egdHttpClient;
-        private readonly EgdOptions _egdOptions;
+        private readonly HomeAssistantService _homeAssistantService;
 
-        public HomeAssistant(IEgdHttpClient egdHttpClient,
-            [FromKeyedServices(Constants.Egd)] IOAuthOptions egdOptions)
+        public HomeAssistant(HomeAssistantService homeAssistantService)
         {
-            _egdHttpClient = egdHttpClient;
-            _egdOptions = (EgdOptions)egdOptions;
+            _homeAssistantService = homeAssistantService;
         }
 
         //[Authorize(Constants.Egd)]
         [HttpGet(nameof(GetVirtualBatteryStatus))]
-        public async Task<IActionResult> GetVirtualBatteryStatus(/*[FromHeader] string scope = "RegnalHome.HomeAssistant", [FromHeader] string client_id = "RegnalHome.HomeAssistant", [FromHeader] string client_secret = RegnalHome.Common.RegnalIdentity.Configuration.IdentityServer.Clients.RegnalHome.HomeAssistant.ClientSecret,*/ int? year = null)
+        public async Task<IActionResult> GetVirtualBatteryStatus(int? year = null)
         {
-            var today = DateTime.Today;
-            var dateFrom = new DateTime(year ?? DateTime.Now.Year, _egdOptions.BeginDateTime.Month, _egdOptions.BeginDateTime.Day);
-            var dateTo = year == null
-                            ? today.AddSeconds(-1)
-                            : new DateTime((int)year, today.Month, today.Day);
-
-            var production = await _egdHttpClient.GetProduction(dateFrom, dateTo, HttpContext.RequestAborted);
-            var consumption = await _egdHttpClient.GetConsumption(dateFrom, dateTo, HttpContext.RequestAborted);
-
-            var consumptionTotal = consumption.Sum();
-            var productionTotal = production.Sum();
-
-            consumptionTotal = consumptionTotal / 4;
-            productionTotal = productionTotal / 4;
-
-            var total = productionTotal - consumptionTotal;
-
-            return Ok(new { total });
+            return Ok( await _homeAssistantService.GetVirtualBatteryStatus(year, HttpContext.RequestAborted));
         }
     }
 }

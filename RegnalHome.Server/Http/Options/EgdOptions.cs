@@ -14,6 +14,6 @@
 
         public string Ean => "859182400202690899";
 
-        public DateTime BeginDateTime => new DateTime(2024, 3, 18);
+        public DateTime BeginDateTime => new DateTime(2024, 2, 28);
     }
 }
