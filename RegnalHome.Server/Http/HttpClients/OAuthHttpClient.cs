@@ -106,6 +106,8 @@ namespace RegnalHome.Server.Http.HttpClients
             var client = _httpClientFactory.CreateClient();
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _settings.Token);
+            client.Timeout = TimeSpan.FromMinutes(5);
+
             return client;
         }
 
