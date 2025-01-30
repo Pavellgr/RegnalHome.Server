@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.Timeouts;
+using Microsoft.AspNetCore.Mvc;
 using RegnalHome.Server.Services;
 
 namespace RegnalHome.Server.Controllers
@@ -15,6 +16,7 @@ namespace RegnalHome.Server.Controllers
         }
 
         //[Authorize(Constants.Egd)]
+        [DisableRequestTimeout]
         [HttpGet(nameof(GetVirtualBatteryStatus))]
         public async Task<IActionResult> GetVirtualBatteryStatus(int? year = null)
         {
