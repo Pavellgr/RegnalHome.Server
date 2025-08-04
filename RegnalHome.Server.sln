@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegnalHome.Common", "Regnal
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{63306DDC-00AE-4D10-A5C6-DCA18AC9C52D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegnalHome.App", "RegnalHome.App\RegnalHome.App.csproj", "{C35EC835-5E80-43BA-8C34-DF23BE47038B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegnalHome.Web", "RegnalHome.Web\RegnalHome.Web.csproj", "{AC3AE809-72DE-4B87-9F79-539197E0F1A0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegnalHome.Server.Tests", "RegnalHome.Server.Tests\RegnalHome.Server.Tests.csproj", "{B9D239DD-1EC0-4D5D-B4D9-5D1BF9FCE29D}"
@@ -33,12 +31,6 @@ Global
 		{63306DDC-00AE-4D10-A5C6-DCA18AC9C52D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63306DDC-00AE-4D10-A5C6-DCA18AC9C52D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63306DDC-00AE-4D10-A5C6-DCA18AC9C52D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C35EC835-5E80-43BA-8C34-DF23BE47038B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C35EC835-5E80-43BA-8C34-DF23BE47038B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C35EC835-5E80-43BA-8C34-DF23BE47038B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{C35EC835-5E80-43BA-8C34-DF23BE47038B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C35EC835-5E80-43BA-8C34-DF23BE47038B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C35EC835-5E80-43BA-8C34-DF23BE47038B}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{AC3AE809-72DE-4B87-9F79-539197E0F1A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AC3AE809-72DE-4B87-9F79-539197E0F1A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC3AE809-72DE-4B87-9F79-539197E0F1A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
